@@ -1,0 +1,639 @@
+@import "tailwindcss";
+
+/* ════════════════════════════════════════════════════════════════════════
+   DRA. YANINA TRAVERSO — Sistema de diseño
+
+   Negro y dorado, como su logo. Tres reglas que no se rompen:
+   1. Ningún valor de color, espaciado o tipografía se escribe a mano en un
+      componente. Todo sale de un token de acá.
+   2. El sitio tiene un solo tema, oscuro: negro, beige oscuro y dorado. No hay
+      versión clara, así que los tokens semánticos tienen un único valor.
+   3. El dorado se usa con avaricia: la acción principal, los rótulos y los
+      filetes. Un sitio dorado entero deja de ser sobrio y pasa a ser un
+      casino; el dorado vale porque hay poco.
+   ════════════════════════════════════════════════════════════════════════ */
+
+@layer reset, base, componentes, utilidades;
+
+/* ─────────────────────── Tokens ─────────────────────── */
+
+@theme {
+  /* Tipografía — dos familias, cada una con un trabajo.
+     La serif (Cormorant Garamond) es la del logo: títulos y nombre propio.
+     La sans (Manrope) es para leer y para la interfaz.
+     Las variables --fuente-* las define next/font en layout.tsx; lo que
+     sigue a cada una es el respaldo si la fuente no llega a cargar. */
+  --font-sans: var(--fuente-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--fuente-serif), "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, serif;
+
+  /* Escala modular. Nunca px en font-size: rem respeta el tamaño de fuente
+     que el usuario configuró en su navegador. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.625rem;
+  /* Los títulos grandes escalan con el viewport pero con techo y piso. Más
+     grandes que en un sitio con sans: la Cormorant tiene el ojo chico y a
+     igual tamaño se lee más pequeña. */
+  --text-hero: clamp(2.75rem, 1.5rem + 5vw, 5rem);
+
+  /* Radios mínimos: las esquinas redondeadas suavizan, y acá no se busca
+     suavidad sino precisión. */
+  --radius-sm: 0.0625rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.1875rem;
+
+  /* ── Tier 1: colores literales ──
+     "Tinta": la escala de beige, del casi negro al arena claro. No es un gris:
+     tiene el tono del dorado (70–85) y cada vez más color a medida que
+     aclara, para que las superficies se lean como beige oscuro y no como
+     gris carbón. Los tres de abajo (900–950) son los fondos; 700–800, las
+     franjas y bordes; 100–400, el texto. */
+  --color-tinta-100: oklch(93% 0.022 85);
+  --color-tinta-300: oklch(82% 0.035 82);
+  --color-tinta-400: oklch(73% 0.038 80);
+  --color-tinta-500: oklch(58% 0.04 78);
+  --color-tinta-600: oklch(47% 0.04 75);
+  --color-tinta-700: oklch(36% 0.036 72);
+  --color-tinta-800: oklch(28% 0.03 70);
+  --color-tinta-850: oklch(22% 0.023 70);
+  --color-tinta-900: oklch(17% 0.017 70);
+  --color-tinta-950: oklch(13% 0.011 70);
+
+  --color-oro-300: oklch(86% 0.09 88);
+  --color-oro-400: oklch(78% 0.11 85);
+  --color-oro-600: oklch(51% 0.09 80);
+
+  --color-rojo-400: oklch(68% 0.18 25);
+  --color-ambar-400: oklch(78% 0.15 75);
+  --color-verde-400: oklch(72% 0.15 150);
+
+  /* ── Tier 2: tokens semánticos ──
+     Tres profundidades, de más a menos oscuro: el negro del logo (franja de
+     marca), el fondo casi negro y el beige oscuro de tarjetas y franjas.
+     El contraste de texto-suave sobre superficie-alt, el peor caso, es 6:1. */
+  --color-fondo: var(--color-tinta-950);
+  --color-superficie: var(--color-tinta-900);
+  --color-superficie-alt: var(--color-tinta-800);
+
+  --color-texto: var(--color-tinta-100);
+  --color-texto-suave: var(--color-tinta-400);
+  --color-texto-inverso: var(--color-tinta-950);
+
+  --color-borde: var(--color-tinta-700);
+  --color-borde-fuerte: var(--color-tinta-600);
+
+  --color-acento: var(--color-oro-400);
+  --color-acento-hover: var(--color-oro-300);
+
+  --color-peligro: var(--color-rojo-400);
+  --color-aviso: var(--color-ambar-400);
+  --color-exito: var(--color-verde-400);
+
+  /* El negro del logo, exacto. La franja de marca usa este y no tinta-950
+     para que el medallón del logo no muestre un borde contra el fondo. */
+  --color-marca-fondo: oklch(0% 0 0);
+
+  /* WhatsApp: color de marca ajena, no del sistema de diseño. Fijo. */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1da851;
+}
+
+/* ─────────────────────── Base ─────────────────────── */
+
+@layer base {
+  :root {
+    /* Tema único, oscuro: con esto las barras de scroll, los controles de
+       formulario y el fondo inicial del canvas también salen oscuros. Va en
+       :root, no en body: body no controla el viewport. */
+    color-scheme: dark;
+
+    accent-color: var(--color-acento);
+    scrollbar-color: var(--color-borde-fuerte) transparent;
+  }
+
+  * { min-width: 0; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* El encabezado es fijo: sin esto, saltar a #sucesiones deja el título
+       tapado debajo de él. */
+    scroll-padding-block-start: 7rem;
+  }
+
+  body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    /* Sin scroll horizontal jamás */
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* Las imágenes reservan su espacio antes de cargar: sin saltos de layout */
+  img, picture, video, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Anillo de foco propio, visible, y solo cuando corresponde mostrarlo.
+     :focus-visible, no :focus — así no aparece al hacer clic con el mouse. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Área táctil mínima según WCAG 2.5.8. min-block-size en lugar de height
+     para que el contenido pueda agrandar el objetivo, nunca achicarlo. */
+  :where(a[href], button, [role="button"], input[type="checkbox"], input[type="radio"]) {
+    min-block-size: 24px;
+  }
+
+  @media (pointer: coarse) {
+    :where(a[href], button, [role="button"]) {
+      min-block-size: 44px;
+      min-inline-size: 44px;
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-acento);
+    color: var(--color-texto-inverso);
+  }
+
+  ::placeholder { color: var(--color-texto-suave); }
+
+  /* :user-invalid en lugar de :invalid — solo marca error después de que la
+     persona interactuó con el campo, en vez de gritarle apenas carga la página. */
+  :where(input, textarea, select):user-invalid {
+    border-color: var(--color-peligro);
+  }
+
+  /* En modo de alto contraste de Windows los colores del autor se descartan y
+     desaparecen sombras y fondos. Bordes con colores del sistema para que los
+     límites de los elementos sigan siendo visibles. */
+  @media (forced-colors: active) {
+    :where(button, .tarjeta, input, select, textarea) {
+      border: 1px solid ButtonBorder;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─────────────────────── Componentes ─────────────────────── */
+
+@layer componentes {
+  .contenedor {
+    inline-size: 100%;
+    max-inline-size: 76rem;
+    margin-inline: auto;
+    /* 16px de canaleta en móvil, más aire a medida que hay lugar */
+    padding-inline: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  }
+
+  /* Ritmo vertical de las secciones de la portada: mucho aire. El aire es lo
+     que separa "sobrio" de "vacío con cosas", y es gratis. */
+  .seccion {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
+  }
+
+  /* ── Franja de marca ──
+     El negro exacto del logo: es donde vive el medallón, y el punto más
+     oscuro de la página. El resto del sitio es apenas más claro y cálido,
+     así que esta franja se lee como un escalón hacia abajo. */
+  .franja-marca {
+    background-color: var(--color-marca-fondo);
+    color: var(--color-texto);
+  }
+
+  /* ── Franja arena ──
+     El escalón hacia arriba: beige oscuro, para cortar el negro una o dos
+     veces por página. Las tarjetas de adentro quedan más oscuras que la
+     franja, como hundidas. El borde sube un tono para no perderse. */
+  .franja-arena {
+    --color-borde: var(--color-tinta-600);
+    --color-borde-fuerte: var(--color-tinta-500);
+
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-tinta-800),
+      var(--color-tinta-850)
+    );
+    border-block: 1px solid var(--color-tinta-700);
+    color: var(--color-texto);
+  }
+
+  /* Tarjeta que es un enlace entero: avisa con el borde que se puede tocar. */
+  .tarjeta-enlace {
+    display: block;
+    transition: border-color 200ms ease;
+
+    &:hover { border-color: var(--color-acento); }
+  }
+
+  /* Enlace del menú. La página actual se marca con color y con un filete
+     debajo: el color solo no alcanza para quien no distingue el dorado. */
+  .enlace-nav {
+    padding-block: 0.375rem;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms ease, border-color 200ms ease;
+
+    &:hover { color: var(--color-acento); }
+
+    &[aria-current="page"] {
+      color: var(--color-acento);
+      border-bottom-color: var(--color-acento);
+    }
+  }
+
+  /* Rótulo: la línea chica en mayúsculas espaciadas arriba de un título.
+     Sale del "A B O G A D A" del logo. */
+  .rotulo {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-acento);
+  }
+
+  /* Filete: la línea dorada fina del logo, que se apaga hacia la derecha. */
+  .filete {
+    block-size: 1px;
+    inline-size: 100%;
+    max-inline-size: 9rem;
+    border: 0;
+    background: linear-gradient(90deg, var(--color-acento), transparent);
+  }
+
+  .tarjeta {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  /* Tarjeta de área de práctica: número, nombre y una línea. El número va en
+     dorado y chico: ordena la lectura sin competir con el nombre. */
+  .tarjeta-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.5rem;
+    transition: border-color 200ms ease, background-color 200ms ease;
+
+    & .numero {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--color-acento);
+      font-variant-numeric: tabular-nums;
+    }
+
+    & h3 { font-size: var(--text-xl); }
+
+    & p {
+      font-size: var(--text-sm);
+      color: var(--color-texto-suave);
+    }
+
+    &:hover { border-color: var(--color-acento); }
+
+    /* Empuja el enlace al pie, para que queden alineados entre tarjetas de
+       una misma fila aunque los textos tengan distinto largo. */
+    & .enlace-flecha { margin-top: auto; padding-top: 0.5rem; }
+  }
+
+  /* Enlace de texto con flecha: la acción secundaria de una tarjeta. */
+  .enlace-flecha {
+    align-self: flex-start;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-acento);
+
+    &::after {
+      content: "→";
+      display: inline-block;
+      margin-left: 0.375rem;
+      transition: translate 200ms ease;
+    }
+
+    &:hover::after { translate: 0.25rem 0; }
+  }
+
+  /* El medallón del logo. El aro y el resplandor son del mismo dorado del
+     acento, mezclado con transparente: así acompañan al tema sin un color
+     nuevo. */
+  .medallon {
+    inline-size: min(100%, 22rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-acento) 40%, transparent),
+      0 0 0 0.75rem color-mix(in oklab, var(--color-acento) 6%, transparent),
+      0 0 6rem -1.5rem color-mix(in oklab, var(--color-acento) 55%, transparent);
+  }
+
+  /* Monograma del encabezado: las iniciales en un aro fino. */
+  .monograma {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: 2.5rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--color-acento);
+    border-radius: 50%;
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-acento);
+  }
+
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-block-size: 2.875rem;
+    padding-inline: 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+
+  .boton-principal {
+    background-color: var(--color-acento);
+    color: var(--color-texto-inverso);
+    border: 1px solid transparent;
+
+    &:hover { background-color: var(--color-acento-hover); }
+  }
+
+  .boton-secundario {
+    background-color: transparent;
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde-fuerte);
+
+    &:hover { border-color: var(--color-acento); color: var(--color-acento); }
+  }
+
+  /* El verde de WhatsApp va con texto negro: con blanco no llega a 2:1. */
+  .boton-whatsapp {
+    background-color: var(--color-whatsapp);
+    color: #06140b;
+    border: 1px solid transparent;
+
+    &:hover { background-color: var(--color-whatsapp-hover); }
+  }
+
+  .boton:disabled,
+  .boton[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Páginas de texto largo: aviso legal, privacidad, sobre mí.
+     Ancho de medida cómodo (~68 caracteres) y ritmo vertical consistente. */
+  .prosa {
+    max-inline-size: 68ch;
+
+    & h2 {
+      font-size: var(--text-xl);
+      margin-block: 2.5rem 0.75rem;
+    }
+
+    & h3 {
+      font-size: var(--text-lg);
+      margin-block: 1.5rem 0.5rem;
+    }
+
+    & p, & ul, & ol, & table {
+      margin-block-end: 1rem;
+      color: var(--color-texto-suave);
+    }
+
+    & ul, & ol {
+      padding-inline-start: 1.25rem;
+    }
+
+    & ul { list-style: disc; }
+    & ol { list-style: decimal; }
+    & li { margin-block-end: 0.375rem; }
+
+    & a {
+      color: var(--color-acento);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    & strong { color: var(--color-texto); }
+
+    & table {
+      inline-size: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+    }
+
+    & th, & td {
+      text-align: start;
+      padding-block: 0.625rem;
+      padding-inline-end: 1rem;
+      border-block-end: 1px solid var(--color-borde);
+      vertical-align: top;
+    }
+
+    & th { color: var(--color-texto); font-weight: 600; }
+  }
+
+  /* Ficha de datos: matrícula, horario, zona. Término chico arriba, dato abajo. */
+  .ficha {
+    display: grid;
+    gap: 1.5rem;
+
+    & dt {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-texto-suave);
+    }
+
+    & dd { margin-block-start: 0.25rem; }
+  }
+
+  /* Bloque de aviso: para lo que todavía hay que completar o revisar. */
+  .aviso {
+    border: 1px solid var(--color-aviso);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    font-size: var(--text-sm);
+    background-color: var(--color-superficie-alt);
+  }
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+
+    & label { font-size: var(--text-sm); font-weight: 600; }
+
+    & input, & textarea, & select {
+      min-block-size: 2.875rem;
+      padding: 0.625rem 0.75rem;
+      border: 1px solid var(--color-borde-fuerte);
+      border-radius: var(--radius-md);
+      background-color: var(--color-superficie);
+      color: inherit;
+      font: inherit;
+    }
+
+    & textarea { min-block-size: 7rem; resize: vertical; }
+
+    & .ayuda { font-size: var(--text-xs); color: var(--color-texto-suave); }
+    & .error { color: var(--color-peligro); font-size: var(--text-sm); }
+  }
+
+  /* Grupo de opciones (radios): un fieldset con su leyenda como etiqueta. */
+  .opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0;
+
+    & legend {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      margin-block-end: 0.5rem;
+      padding: 0;
+    }
+
+    & label {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      min-block-size: 2.875rem;
+      padding-inline: 0.75rem;
+      border: 1px solid var(--color-borde-fuerte);
+      border-radius: var(--radius-md);
+      background-color: var(--color-superficie);
+      cursor: pointer;
+
+      /* La opción elegida se marca con el borde además del punto del radio:
+         el color solo no alcanza para quien no lo distingue. */
+      &:has(input:checked) {
+        border-color: var(--color-acento);
+        box-shadow: inset 0 0 0 1px var(--color-acento);
+      }
+    }
+
+    & .error { color: var(--color-peligro); font-size: var(--text-sm); }
+  }
+
+  /* Etiqueta de estado de un turno, en el panel. */
+  .estado {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}
+
+/* ═══════════════════ Movimiento ═══════════════════
+
+   Todo lo que se mueve va dentro de prefers-reduced-motion: no-preference.
+   Para quien pidió menos movimiento —por mareos, migrañas o simple
+   preferencia— el sitio queda quieto. No es un extra: para esas personas la
+   animación es el problema.
+
+   Y todo es mejora progresiva: donde el navegador no lo soporta, el
+   contenido se ve igual, simplemente sin el efecto.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  /* Navegar deja de ser un parpadeo: el contenido sale hacia arriba y el
+     nuevo entra desde abajo. 220ms es lo que se percibe como inmediato. */
+  ::view-transition-old(root) {
+    animation: 180ms cubic-bezier(0.4, 0, 1, 1) both salir-contenido;
+  }
+
+  ::view-transition-new(root) {
+    animation: 220ms cubic-bezier(0, 0, 0.2, 1) both entrar-contenido;
+  }
+
+  @keyframes salir-contenido {
+    to { opacity: 0; transform: translateY(-8px); }
+  }
+
+  @keyframes entrar-contenido {
+    from { opacity: 0; transform: translateY(10px); }
+  }
+
+  /* El encabezado y el pie no se animan: quedan fijos mientras el resto se
+     mueve. Sin esto se desvanecen junto con la página y el efecto se siente
+     barato. */
+  .encabezado-sitio { view-transition-name: encabezado; }
+  .pie-sitio { view-transition-name: pie; }
+
+  /* Las secciones aparecen a medida que entran en pantalla, atadas al scroll
+     y no a un reloj: si la persona frena, la animación frena. Es CSS puro
+     (animation-timeline), sin JavaScript ni observadores.
+
+     Va dentro de @supports: en un navegador sin soporte, la regla entera se
+     ignora y el contenido queda visible. Lo que NO puede pasar es que quede
+     en opacity: 0 esperando una animación que nunca corre. */
+  @supports (animation-timeline: view()) {
+    .revelar {
+      animation: revelar linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+
+    @keyframes revelar {
+      from { opacity: 0; transform: translateY(1.25rem); }
+    }
+  }
+}

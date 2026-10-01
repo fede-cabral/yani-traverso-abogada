@@ -1,0 +1,21 @@
+-- ════════════════════════════════════════════════════════════════════════
+--  Datos iniciales
+--  0003_seed.sql
+--
+--  Vacío a propósito.
+--
+--  En la plantilla este archivo cargaba las categorías y los productos del
+--  catálogo inicial. Este sitio es de un estudio jurídico: no tiene catálogo.
+--  Las áreas de práctica son contenido fijo del sitio (src/lib/areas.ts), no
+--  filas de la base.
+--
+--  Las tablas de catálogo que crean 0001 a 0008 (categorias, productos,
+--  variantes, imagenes_producto, promociones) quedan creadas y vacías. No se
+--  borran porque las políticas y funciones de seguridad de esas migraciones
+--  las referencian, y esas migraciones no se editan. RLS las protege igual
+--  que al resto: nadie del público puede escribir en ellas.
+--
+--  El archivo se conserva para no dejar un hueco en la numeración.
+-- ════════════════════════════════════════════════════════════════════════
+
+select 1;

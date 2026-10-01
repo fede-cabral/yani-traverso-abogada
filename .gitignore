@@ -1,0 +1,34 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Entorno — NUNCA commitear
+.env
+.env.local
+.env.*.local
+.env.production
+.env.test
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+
+# Testing / TS
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# Carpeta de descarte: lo que se movió para borrar a mano
+_para_borrar/

@@ -1,0 +1,26 @@
+# Finales de línea deterministas en cualquier sistema.
+#
+# Sin esto, el mismo archivo editado en Windows (CRLF) y en Mac o Linux (LF)
+# aparece como "cambiado entero" en Git aunque nadie haya tocado una letra, y
+# los diffs se vuelven ilegibles. Todo se guarda con LF; cada editor muestra
+# lo que prefiera.
+* text=auto eol=lf
+
+# Scripts de Windows: PowerShell 5.1 los lee mejor con CRLF.
+*.ps1 text eol=crlf
+
+# Binarios: nunca tocar sus bytes.
+*.webp binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.pdf  binary
+*.xlsx binary
+
+# El lockfile se regenera, no se mergea a mano: en un conflicto, gana la
+# versión de una de las dos ramas y se vuelve a correr npm install.
+package-lock.json -diff merge=binary
