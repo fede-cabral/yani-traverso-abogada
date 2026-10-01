@@ -32,3 +32,9 @@ supabase/.branches/
 
 # Carpeta de descarte: lo que se movió para borrar a mano
 _para_borrar/
+
+# Vercel
+.vercel
+
+.vercel
+.env*
