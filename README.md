@@ -6,6 +6,9 @@ panel privado donde ella ve los turnos y las consultas.
 **Matrícula:** T° LXX F° 338, Colegio de Abogados de La Plata · **Zona:**
 Provincia de Buenos Aires y CABA · **Horario:** lunes a viernes, 10 a 13 y 15 a 18
 
+**Demo en vivo:** https://yani-traverso-abogada.vercel.app — corre en modo
+demostración: datos de ejemplo, los formularios no guardan y el panel está abierto.
+
 **Stack:** Next.js 16 (App Router) · TypeScript estricto · Tailwind CSS v4 · Supabase (Postgres + Auth + RLS) · Vercel
 
 **Qué hace y qué no:** recibe pedidos de turno y consultas. No cobra, no tiene
