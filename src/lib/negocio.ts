@@ -34,6 +34,9 @@ export const NEGOCIO = {
   /** La frase grande de la portada y de la tarjeta al compartir el sitio. */
   eslogan: "Asesoría jurídica integral",
 
+  /** La promesa de trato, debajo del título de la portada. */
+  lema: "Vas a tener acompañamiento en todo el proceso.",
+
   /** El párrafo debajo del eslogan, en la portada. */
   presentacion:
     "Abogada especialista en derecho inmobiliario y notarial. Atención en Provincia de Buenos Aires y CABA.",

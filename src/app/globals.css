@@ -27,6 +27,8 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: var(--fuente-serif), "Iowan Old Style", "Palatino Linotype",
     Palatino, Georgia, serif;
+  /* La tercera, solo para el título de la portada (ver layout.tsx). */
+  --font-display: var(--fuente-display), "Trajan Pro", var(--font-serif);
 
   /* Escala modular. Nunca px en font-size: rem respeta el tamaño de fuente
      que el usuario configuró en su navegador. */
@@ -52,8 +54,10 @@
      "Tinta": la escala de beige, del casi negro al arena claro. No es un gris:
      tiene el tono del dorado (70–85) y cada vez más color a medida que
      aclara, para que las superficies se lean como beige oscuro y no como
-     gris carbón. Los tres de abajo (900–950) son los fondos; 700–800, las
-     franjas y bordes; 100–400, el texto. */
+     gris carbón. Los fondos (850–950) son la excepción: gris oscuro neutro,
+     sin tono. Se probó tirando a marrón y el dorado se lucía menos; sobre gris
+     frío, el beige del texto y el oro del acento son lo único cálido de la
+     página. 700–800 son las franjas y bordes; 100–400, el texto. */
   --color-tinta-100: oklch(93% 0.022 85);
   --color-tinta-300: oklch(82% 0.035 82);
   --color-tinta-400: oklch(73% 0.038 80);
@@ -61,9 +65,9 @@
   --color-tinta-600: oklch(47% 0.04 75);
   --color-tinta-700: oklch(36% 0.036 72);
   --color-tinta-800: oklch(28% 0.03 70);
-  --color-tinta-850: oklch(22% 0.023 70);
-  --color-tinta-900: oklch(17% 0.017 70);
-  --color-tinta-950: oklch(13% 0.011 70);
+  --color-tinta-850: oklch(25% 0 0);
+  --color-tinta-900: oklch(21% 0 0);
+  --color-tinta-950: oklch(17.5% 0 0);
 
   --color-oro-300: oklch(86% 0.09 88);
   --color-oro-400: oklch(78% 0.11 85);
@@ -95,9 +99,10 @@
   --color-aviso: var(--color-ambar-400);
   --color-exito: var(--color-verde-400);
 
-  /* El negro del logo, exacto. La franja de marca usa este y no tinta-950
-     para que el medallón del logo no muestre un borde contra el fondo. */
-  --color-marca-fondo: oklch(0% 0 0);
+  /* El escalón más oscuro: la franja de marca, donde vive el medallón. No es
+     negro puro a propósito — el negro absoluto se veía duro — así que el
+     medallón (fondo negro en la imagen) se lee como una moneda apoyada. */
+  --color-marca-fondo: oklch(14% 0 0);
 
   /* WhatsApp: color de marca ajena, no del sistema de diseño. Fijo. */
   --color-whatsapp: #25d366;
@@ -226,8 +231,8 @@
   }
 
   /* ── Franja de marca ──
-     El negro exacto del logo: es donde vive el medallón, y el punto más
-     oscuro de la página. El resto del sitio es apenas más claro y cálido,
+     El gris más oscuro: es donde vive el medallón, y el punto más oscuro
+     de la página. El resto del sitio es apenas más claro y cálido,
      así que esta franja se lee como un escalón hacia abajo. */
   .franja-marca {
     background-color: var(--color-marca-fondo);
@@ -283,6 +288,44 @@
     letter-spacing: 0.24em;
     text-transform: uppercase;
     color: var(--color-acento);
+  }
+
+  /* ── Título de la portada ──
+     Romana de inscripción, como las mayúsculas del logo. Interletrado
+     abierto y renglones cortados a mano: el título se compone como una
+     placa, no se deja caer como un párrafo. La segunda línea va en dorado
+     y un poco más chica, para que "integral" cierre y no compita. */
+  .titulo-portada {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.25rem, 1.1rem + 4.2vw, 4.25rem);
+    line-height: 1.12;
+    letter-spacing: 0.035em;
+    text-wrap: initial;
+
+    & .linea { display: block; }
+    & .linea-acento {
+      margin-block-start: 0.15em;
+      font-size: 0.82em;
+      letter-spacing: 0.12em;
+      color: var(--color-acento);
+    }
+  }
+
+  /* ── Lema ──
+     La promesa de trato, en itálica: la voz de la Dra. hablándole a quien
+     llega, distinta de la voz institucional del título. El filete vertical
+     dorado la ancla como una cita sin necesidad de comillas. */
+  .lema {
+    border-inline-start: 1px solid var(--color-acento);
+    padding-inline-start: 1.25rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.9rem);
+    line-height: 1.3;
+    color: var(--color-texto);
+    text-wrap: balance;
   }
 
   /* Filete: la línea dorada fina del logo, que se apaga hacia la derecha. */

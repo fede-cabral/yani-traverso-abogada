@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Cinzel, Cormorant_Garamond, Manrope } from "next/font/google";
 import { headers } from "next/headers";
 import { env } from "@/lib/env";
 import "./globals.css";
@@ -31,6 +31,19 @@ const serif = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--fuente-serif",
+  display: "swap",
+});
+
+/*
+  Cinzel, solo para el título de la portada. Es una romana de inscripción, de
+  la familia de las mayúsculas "YANINA TRAVERSO" del logo: sus minúsculas son
+  versalitas, así que el título se lee con la solemnidad de una placa grabada
+  sin gritar en mayúsculas. Fuera del título no se usa — en un párrafo cansa.
+*/
+const display = Cinzel({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--fuente-display",
   display: "swap",
 });
 
@@ -74,7 +87,7 @@ export default async function RootLayout({
     // "viaja" desde el scroll anterior hasta arriba).
     <html
       lang="es-AR"
-      className={`${serif.variable} ${sans.variable}`}
+      className={`${serif.variable} ${sans.variable} ${display.variable}`}
       data-scroll-behavior="smooth"
     >
       <head>

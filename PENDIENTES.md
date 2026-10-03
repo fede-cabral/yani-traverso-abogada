@@ -26,6 +26,9 @@ Sin esto el sitio funciona en demostración, pero no se puede publicar.
       saca el cartel de las dos páginas.
 - [ ] **Confirmar que el horario y el modo de turnos son los que quiere**:
       pedido por día y franja (mañana o tarde), que ella confirma por teléfono.
+- [ ] **Aprobar el lema de la portada**: "Vas a tener acompañamiento en todo
+      el proceso." Lo propuso federico el 03/10/2026; es una promesa de
+      trato, no de resultado, pero va en su nombre. Está en `negocio.ts` → `lema`.
 - [ ] **Foto profesional**, para "Sobre mí". Hoy va el logo en su lugar.
 - [x] **LinkedIn**: cargado el 01/10/2026.
 - [ ] **Instagram**, cuando exista. Se carga en `negocio.ts` y aparece solo.

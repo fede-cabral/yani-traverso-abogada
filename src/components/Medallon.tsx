@@ -10,8 +10,9 @@ import { NEGOCIO } from "@/lib/negocio";
  * las dos medidas ya están generadas en public/marca/ y el srcset se escribe
  * a mano.
  *
- * Va siempre sobre la franja de marca: el fondo del logo es negro puro y
- * sobre cualquier otro color se le vería el recorte.
+ * Va siempre sobre la franja de marca, el gris más oscuro del sitio: el fondo
+ * del logo es negro puro, y sobre un color claro el disco se vería recortado.
+ * Sobre la franja, apenas más clara, se lee como una moneda apoyada.
  */
 export function Medallon({
   prioritario = false,

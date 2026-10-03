@@ -10,6 +10,15 @@ import { enlaceGeneral } from "@/lib/whatsapp";
 const ESPECIALIDADES = AREAS.filter((a) => a.especialidad);
 const OTRAS_AREAS = AREAS.filter((a) => !a.especialidad);
 
+/*
+  El título se corta a mano antes de la última palabra: "Asesoría jurídica"
+  arriba, "integral" abajo en dorado. Dejar que el navegador lo corte según
+  el ancho daba renglones distintos en cada pantalla.
+*/
+const corte = NEGOCIO.eslogan.lastIndexOf(" ");
+const inicioEslogan = corte > 0 ? NEGOCIO.eslogan.slice(0, corte) : NEGOCIO.eslogan;
+const cierreEslogan = corte > 0 ? NEGOCIO.eslogan.slice(corte + 1) : "";
+
 const PASOS = [
   {
     titulo: "Pedís el turno",
@@ -99,11 +108,13 @@ export default function Home() {
         <div className="contenedor grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-28">
           <div>
             <p className="rotulo">{NEGOCIO.nombre} · {NEGOCIO.rubro}</p>
-            <h1 className="mt-5 max-w-2xl text-[length:var(--text-hero)]">
-              {NEGOCIO.eslogan}
+            <h1 className="titulo-portada mt-6">
+              <span className="linea">{inicioEslogan}</span>
+              <span className="linea linea-acento">{cierreEslogan}</span>
             </h1>
-            <hr className="filete mt-7" />
-            <p className="mt-7 max-w-xl text-lg text-texto-suave">
+            <hr className="filete mt-8" />
+            <p className="lema mt-8 max-w-xl">{NEGOCIO.lema}</p>
+            <p className="mt-6 max-w-xl text-lg text-texto-suave">
               {NEGOCIO.presentacion}
             </p>
 
