@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Medallon } from "@/components/Medallon";
+import { Compartido } from "@/components/Compartido";
 import { AREAS } from "@/lib/areas";
 import { BIOGRAFIA } from "@/lib/biografia";
 import { env } from "@/lib/env";
@@ -212,11 +213,17 @@ export default function Home() {
       <section className="contenedor seccion revelar" aria-labelledby="titulo-sobre-mi">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <p className="rotulo">Sobre mí</p>
+            {/* El rótulo y el filete son los mismos de la cabecera de
+                "Sobre mí": al tocar "Conocer más" viajan hasta allá. */}
+            <Compartido nombre="rotulo-sobre-mi">
+              <p className="rotulo">Sobre mí</p>
+            </Compartido>
             <h2 id="titulo-sobre-mi" className="mt-4 text-3xl">
               {NEGOCIO.titular}
             </h2>
-            <hr className="filete mt-6" />
+            <Compartido nombre="filete-sobre-mi">
+              <hr className="filete mt-6" />
+            </Compartido>
           </div>
           <div>
             {/* Cita en primera persona: es su voz, y la serif grande la separa

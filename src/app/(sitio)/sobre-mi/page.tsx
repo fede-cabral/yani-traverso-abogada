@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Medallon } from "@/components/Medallon";
+import { Compartido } from "@/components/Compartido";
 import { BIOGRAFIA } from "@/lib/biografia";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
 
@@ -16,11 +17,15 @@ export default function SobreMi() {
       <section className="franja-marca">
         <div className="contenedor grid items-center gap-12 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:py-24">
           <div>
-            <p className="rotulo">Sobre mí</p>
+            <Compartido nombre="rotulo-sobre-mi">
+              <p className="rotulo">Sobre mí</p>
+            </Compartido>
             <h1 className="mt-4 text-3xl sm:text-[length:var(--text-hero)]">
               {NEGOCIO.titular}
             </h1>
-            <hr className="filete mt-7" />
+            <Compartido nombre="filete-sobre-mi">
+              <hr className="filete mt-7" />
+            </Compartido>
             <p className="mt-7 text-lg text-texto-suave">
               Abogada · Matrícula {MATRICULA_LEGIBLE}
             </p>

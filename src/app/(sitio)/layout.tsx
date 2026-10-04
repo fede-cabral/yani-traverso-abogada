@@ -1,6 +1,7 @@
 import { BannerDemo } from "@/components/layout/BannerDemo";
 import { Encabezado } from "@/components/layout/Encabezado";
 import { PieDePagina } from "@/components/layout/PieDePagina";
+import { TransicionPagina } from "@/components/layout/TransicionPagina";
 
 /** Chrome del sitio público: encabezado, contenido y pie. */
 export default function SitioLayout({
@@ -16,7 +17,7 @@ export default function SitioLayout({
       </a>
       <BannerDemo />
       <Encabezado />
-      <div className="flex-1">{children}</div>
+      <TransicionPagina>{children}</TransicionPagina>
       <PieDePagina />
     </>
   );

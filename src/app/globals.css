@@ -265,18 +265,27 @@
   }
 
   /* Enlace del menú. La página actual se marca con color y con un filete
-     debajo: el color solo no alcanza para quien no distingue el dorado. */
+     debajo: el color solo no alcanza para quien no distingue el dorado.
+     El filete es un span aparte (ver EnlaceNav) para poder deslizarlo entre
+     secciones. Es un borde y no un fondo: en el modo de alto contraste de
+     Windows los fondos desaparecen y los bordes quedan. */
   .enlace-nav {
+    position: relative;
     padding-block: 0.375rem;
-    border-bottom: 1px solid transparent;
-    transition: color 200ms ease, border-color 200ms ease;
+    transition: color 200ms ease;
 
     &:hover { color: var(--color-acento); }
 
     &[aria-current="page"] {
       color: var(--color-acento);
-      border-bottom-color: var(--color-acento);
     }
+  }
+
+  .filete-nav {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    border-block-end: 1px solid var(--color-acento);
   }
 
   /* Rótulo: la línea chica en mayúsculas espaciadas arriba de un título.
@@ -638,13 +647,19 @@
   }
 
   /* Navegar deja de ser un parpadeo: el contenido sale hacia arriba y el
-     nuevo entra desde abajo. 220ms es lo que se percibe como inmediato. */
-  ::view-transition-old(root) {
-    animation: 180ms cubic-bezier(0.4, 0, 1, 1) both salir-contenido;
+     nuevo entra desde abajo. La entrada espera a que la salida casi termine:
+     si las dos corren juntas, a mitad de camino se ven las dos páginas
+     superpuestas, como una foto con doble exposición. Total, unos 330ms:
+     se percibe como inmediato. Las clases .pagina-* son las de
+     <TransicionPagina>, para las navegaciones dentro del sitio. */
+  ::view-transition-old(root),
+  ::view-transition-old(.pagina-sale) {
+    animation: 150ms cubic-bezier(0.4, 0, 1, 1) both salir-contenido;
   }
 
-  ::view-transition-new(root) {
-    animation: 220ms cubic-bezier(0, 0, 0.2, 1) both entrar-contenido;
+  ::view-transition-new(root),
+  ::view-transition-new(.pagina-entra) {
+    animation: 210ms cubic-bezier(0, 0, 0.2, 1) 120ms both entrar-contenido;
   }
 
   @keyframes salir-contenido {
@@ -660,6 +675,23 @@
      barato. */
   .encabezado-sitio { view-transition-name: encabezado; }
   .pie-sitio { view-transition-name: pie; }
+
+  /* Elementos compartidos (componente <Compartido>): el medallón, el
+     filete del menú y la cabecera de "Sobre mí" existen en las dos páginas y
+     viajan de su lugar viejo al nuevo. 380ms: lo bastante lento para que el
+     ojo siga el recorrido, lo bastante rápido para no hacer esperar. La
+     curva arranca rápido y frena al llegar, como algo que se apoya. */
+  ::view-transition-group(.viaje) {
+    animation-duration: 380ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Mientras dura la transición, el navegador pone una capa encima de la
+     página que se come los clics. Sin esto, tocar algo apenas cambió la
+     página no hace nada y parece roto. */
+  ::view-transition {
+    pointer-events: none;
+  }
 
   /* Las secciones aparecen a medida que entran en pantalla, atadas al scroll
      y no a un reloj: si la persona frena, la animación frena. Es CSS puro
@@ -678,5 +710,18 @@
     @keyframes revelar {
       from { opacity: 0; transform: translateY(1.25rem); }
     }
+  }
+}
+
+/* Con movimiento reducido, las transiciones entre páginas se apagan del
+   todo: el cambio es instantáneo, como sin JavaScript. Va aparte porque el
+   navegador anima los elementos compartidos por su cuenta aunque no haya
+   ninguna regla nuestra, y la regla general de la capa base no alcanza a
+   estos seudoelementos. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

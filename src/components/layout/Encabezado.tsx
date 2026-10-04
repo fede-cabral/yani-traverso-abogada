@@ -31,7 +31,7 @@ export function Encabezado() {
           <ul className="flex items-center gap-7 text-sm">
             {NAVEGACION.map((item) => (
               <li key={item.href}>
-                <EnlaceNav href={item.href}>{item.texto}</EnlaceNav>
+                <EnlaceNav href={item.href} grupo="escritorio">{item.texto}</EnlaceNav>
               </li>
             ))}
           </ul>
@@ -55,7 +55,7 @@ export function Encabezado() {
         <ul className="contenedor flex gap-5 overflow-x-auto pb-2 text-sm">
           {NAVEGACION.map((item) => (
             <li key={item.href}>
-              <EnlaceNav href={item.href} className="flex items-center whitespace-nowrap">
+              <EnlaceNav href={item.href} grupo="movil" className="flex items-center whitespace-nowrap">
                 {item.texto}
               </EnlaceNav>
             </li>
