@@ -96,20 +96,20 @@ Estados: `pendiente` → `confirmado` → `atendido`, o `cancelado`. El público
 
 ## Base de datos
 
-Las migraciones están en `supabase/migrations/`, en orden. Se aplican desde el SQL Editor de Supabase, de la `0001` a la `0010`, o con `supabase db push`.
+Las migraciones están en `supabase/migrations/`, en orden. Se aplican desde el SQL Editor de Supabase, de la `0001` a la `0004`, o con `supabase db push`.
 
 | Archivo | Qué hace |
 |---|---|
-| `0001_schema.sql` | Tablas, tipos, restricciones y auditoría. Incluye `consultas`, `perfiles` y `log_auditoria` |
-| `0002_rls.sql` | Row Level Security: políticas por tabla y por operación |
-| `0003_seed.sql` | Vacío. En la plantilla cargaba el catálogo |
-| `0004_rate_limit.sql` | Contador de peticiones y su función atómica |
-| `0005_verificacion.sql` | Función `tablas_sin_rls()` para el test automatizado |
-| `0006` a `0008` | Columnas y tablas del catálogo de la plantilla. Sin uso acá |
-| `0009_primer_admin.sql` | Permite crear el primer administrador desde el SQL Editor |
-| `0010_turnos.sql` | **Tabla `turnos`**, con RLS forzada y sus restricciones |
+| `0001_esquema.sql` | Tablas, tipos y restricciones: `perfiles`, `consultas`, **`turnos`**, `log_auditoria` y `limite_peticiones`. Cada tabla activa y fuerza RLS en la línea siguiente a su creación |
+| `0002_seguridad.sql` | Row Level Security: políticas por tabla y por operación, protección del rol y alta del primer administrador desde el SQL Editor |
+| `0003_funciones.sql` | Límite de peticiones atómico y `tablas_sin_rls()` para el test automatizado |
+| `0004_retencion.sql` | `borrar_vencidos()`: borra turnos y consultas de más de 24 meses, como promete la política de privacidad, y lo programa con pg_cron todas las noches |
 
-**Sobre las tablas de catálogo.** Este proyecto salió de una plantilla de tienda. Las migraciones `0001` a `0008` crean tablas de productos, categorías y promociones que este sitio no usa. Quedan creadas y vacías: las políticas y funciones de seguridad de esas mismas migraciones las referencian, y reescribir migraciones ya probadas para ahorrar cinco tablas vacías era cambiar un riesgo real por prolijidad. RLS las protege igual que al resto.
+Las cuatro se probaron sobre Postgres real (PGlite) el 05/10/2026, con un entorno que imita los roles de Supabase: se aplican sin errores, `tablas_sin_rls()` da cero filas, un anónimo no lee ni modifica turnos ni consultas, un usuario no puede ascenderse a admin y el borrado respeta los 24 meses. Falta repetirlo en Supabase (ver `PENDIENTES.md`).
+
+**El borrado automático necesita pg_cron.** Si al aplicar la `0004` el SQL Editor muestra el aviso "pg_cron no está disponible", activalo en *Integrations → Cron* y corré la sentencia que indica el aviso. Para comprobar que quedó programado: `select jobname, schedule from cron.job;` tiene que mostrar `borrar-vencidos`.
+
+**Sobre las tablas de catálogo.** Este proyecto salió de una plantilla de tienda. Las migraciones de la plantilla creaban productos, categorías, variantes y promociones; se reescribieron antes de aplicarlas por primera vez para que la base de una abogada no tenga tablas vacías que nadie mira. Se pudo porque ninguna estaba aplicada en ninguna base: desde que se aplique la `0001` en Supabase, rige la regla de siempre — una migración aplicada no se edita, se escribe la siguiente.
 
 ### Verificación obligatoria después de cada migración
 

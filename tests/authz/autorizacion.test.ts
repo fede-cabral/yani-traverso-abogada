@@ -56,7 +56,7 @@ d("Autorización", () => {
       .select("id")
       .single();
 
-    if (error) throw new Error(`Falta la tabla turnos: corré 0010_turnos.sql. ${error.message}`);
+    if (error) throw new Error(`Falta la tabla turnos: corré 0001_esquema.sql. ${error.message}`);
     turnoId = data.id;
 
     [clienteA, clienteB, editor, admin] = await Promise.all([

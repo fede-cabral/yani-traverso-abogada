@@ -43,6 +43,7 @@ const pedidoValido = () => ({
   fecha_preferida: proximoDiaHabil(),
   franja: "manana",
   motivo: null,
+  acepta_privacidad: "si",
 });
 
 describe("Fechas en hora del estudio", () => {
@@ -152,10 +153,21 @@ describe("Pedido de turno", () => {
   it("si el campo trampa viene con algo, el pedido no valida", () => {
     expect(turnoSchema.safeParse({ ...pedidoValido(), website: "http://spam" }).success).toBe(false);
   });
+
+  it("sin aceptar la política de privacidad, el pedido no valida (Ley 25.326, art. 5)", () => {
+    for (const valor of [undefined, null, "", "on", "no", "true"]) {
+      const r = turnoSchema.safeParse({ ...pedidoValido(), acepta_privacidad: valor });
+      expect(r.success, `aceptó acepta_privacidad = ${String(valor)}`).toBe(false);
+    }
+  });
 });
 
 describe("Formulario de contacto", () => {
-  const consulta = { nombre: "Persona de Prueba", mensaje: "Una consulta de prueba." };
+  const consulta = {
+    nombre: "Persona de Prueba",
+    mensaje: "Una consulta de prueba.",
+    acepta_privacidad: "si",
+  };
 
   it("alcanza con un mail o con un teléfono", () => {
     expect(consultaSchema.safeParse({ ...consulta, email: "p@ejemplo.com" }).success).toBe(true);
@@ -172,13 +184,19 @@ describe("Formulario de contacto", () => {
     expect(consultaSchema.safeParse({ ...base, mensaje: "hola" }).success).toBe(false);
     expect(consultaSchema.safeParse({ ...base, mensaje: "x".repeat(2001) }).success).toBe(false);
   });
+
+  it("sin aceptar la política de privacidad, la consulta no valida", () => {
+    const base = { ...consulta, email: "p@ejemplo.com" };
+    expect(consultaSchema.safeParse({ ...base, acepta_privacidad: undefined }).success).toBe(false);
+    expect(consultaSchema.safeParse({ ...base, acepta_privacidad: "on" }).success).toBe(false);
+  });
 });
 
 describe("Áreas de práctica", () => {
   it("los slugs son únicos y tienen el formato que exige la base", () => {
     const slugs = AREAS.map((a) => a.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-    // Misma expresión que la restricción turnos_area_formato de 0010_turnos.sql.
+    // Misma expresión que la restricción turnos_area_formato de 0001_esquema.sql.
     for (const slug of OPCIONES_AREA) {
       expect(slug, `"${slug}" no pasaría la restricción de la base`).toMatch(
         /^[a-z0-9]+(-[a-z0-9]+)*$/,

@@ -33,7 +33,7 @@ export async function enviarConsulta(
 
   // Lo que la persona escribió se devuelve en cada respuesta fallida: sin
   // eso, cualquier error le vacía el formulario.
-  const valores = valoresDe(datos, ["nombre", "email", "telefono", "mensaje"]);
+  const valores = valoresDe(datos, ["nombre", "email", "telefono", "mensaje", "acepta_privacidad"]);
 
   // En demostración no hay base a la que escribir. Se dice con todas las
   // letras en vez de fingir que se guardó.
@@ -62,6 +62,7 @@ export async function enviarConsulta(
     email: datos.get("email") || null,
     telefono: datos.get("telefono") || null,
     mensaje: datos.get("mensaje"),
+    acepta_privacidad: datos.get("acepta_privacidad"),
   });
 
   if (!resultado.success) {

@@ -39,6 +39,15 @@ const email = z.email({ error: "Email inválido" }).max(200);
 /** Trampa para bots: un campo oculto que una persona nunca completa. */
 const trampa = z.string().max(0).optional();
 
+/**
+ * Consentimiento expreso para el tratamiento de los datos (Ley 25.326,
+ * art. 5). La casilla manda "si" solo si está marcada; cualquier otra cosa
+ * —incluido que no venga— se rechaza. Ver CasillaPrivacidad.
+ */
+const aceptaPrivacidad = z.literal("si", {
+  error: "Para enviar el formulario tenés que aceptar la política de privacidad",
+});
+
 /** Formulario de contacto. Lo que más abuso recibe, así que es lo más acotado. */
 export const consultaSchema = z
   .object({
@@ -50,6 +59,7 @@ export const consultaSchema = z
       .trim()
       .min(5, { error: "Contanos un poco más" })
       .max(2000, { error: "Máximo 2000 caracteres" }),
+    acepta_privacidad: aceptaPrivacidad,
     website: trampa,
   })
   .refine((d) => Boolean(d.email) || Boolean(d.telefono), {
@@ -66,7 +76,7 @@ export const consultaSchema = z
  *
  * La fecha se valida tres veces: que exista, que sea día hábil y que caiga
  * en la ventana permitida. La base repite la regla del día hábil (ver
- * 0010_turnos.sql); la ventana no, porque depende del reloj.
+ * 0001_esquema.sql); la ventana no, porque depende del reloj.
  */
 export const turnoSchema = z.object({
   nombre,
@@ -84,6 +94,7 @@ export const turnoSchema = z.object({
     }),
   franja: z.enum(FRANJAS, { error: "Elegí mañana o tarde" }),
   motivo: z.string().trim().max(500, { error: "Máximo 500 caracteres" }).nullable().optional(),
+  acepta_privacidad: aceptaPrivacidad,
   website: trampa,
 });
 

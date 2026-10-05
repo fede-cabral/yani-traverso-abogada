@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { ESTADO_INICIAL } from "@/acciones/estado";
 import { AvisoFormulario } from "@/components/AvisoFormulario";
+import { CasillaPrivacidad } from "@/components/CasillaPrivacidad";
 import { pedirTurno } from "@/acciones/turnos";
 import { AREAS, AREA_OTRA } from "@/lib/areas";
 import { ETIQUETA_FRANJA, FRANJAS } from "@/lib/turnos";
@@ -210,12 +211,13 @@ export function FormularioTurno({ minimo, maximo, areaInicial }: Props) {
         </p>
       </div>
 
-      <Boton />
+      <CasillaPrivacidad
+        finalidad="únicamente para coordinar este turno"
+        errores={errores}
+        valores={valores}
+      />
 
-      <p className="text-xs text-texto-suave">
-        Tus datos se usan únicamente para coordinar este turno. Ver la{" "}
-        <a href="/politica-de-privacidad" className="underline">política de privacidad</a>.
-      </p>
+      <Boton />
     </form>
   );
 }

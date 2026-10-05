@@ -42,7 +42,7 @@ d("Restricciones de la base", () => {
 
     expect(
       error,
-      "Falta la función tablas_sin_rls: corré la migración 0005_verificacion.sql",
+      "Falta la función tablas_sin_rls: corré la migración 0003_funciones.sql",
     ).toBeNull();
 
     expect(data, `Tablas SIN RLS: ${JSON.stringify(data)} — revisar de inmediato`).toEqual([]);

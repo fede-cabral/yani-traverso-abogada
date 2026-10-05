@@ -30,8 +30,9 @@ Hay dos riesgos concretos, y los dos son de la profesión, no del código:
 
 > Este proyecto nació de la plantilla de catálogo (Indumentaria Max). Se le
 > sacó todo lo de tienda — productos, precios, stock, ofertas, promociones —
-> y se le agregó turnos. Las tablas de catálogo siguen creadas en la base,
-> vacías: ver `supabase/migrations/0003_seed.sql`.
+> y se le agregó turnos. Las migraciones se reescribieron sin las tablas de
+> catálogo antes de aplicarse por primera vez (ver `README.md` → "Base de
+> datos").
 
 ---
 

@@ -17,7 +17,8 @@ import { env } from "@/lib/env";
  *     que es una de las formas más fáciles de arruinar un sitio con caché.
  *
  * Las políticas RLS se aplican igual: este cliente ve exactamente lo que ve
- * un visitante anónimo, o sea solo productos con publicado = true.
+ * un visitante anónimo, que en este sitio es nada: turnos y consultas solo
+ * se pueden escribir, no leer.
  */
 export function crearClientePublico() {
   return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {

@@ -1,30 +1,13 @@
 -- ════════════════════════════════════════════════════════════════════════
---  INDUMENTARIA MAX — Límite de peticiones
---  0004_rate_limit.sql
+--  Dra. Yanina Traverso — Funciones de servicio
+--  0003_funciones.sql
 --
---  El rate limiting vive en la base, no en memoria del proceso.
---
---  En un hosting serverless cada petición puede caer en una instancia
---  distinta, así que un contador en memoria no cuenta nada: un atacante con
---  mandar peticiones en paralelo ya lo esquiva. Un contador en Postgres es
---  compartido por todas las instancias y sobrevive a los reinicios.
+--  Las que llama el servidor con la clave de servicio: el límite de
+--  peticiones de los formularios y la comprobación de RLS de los tests.
+--  Ninguna se puede llamar con la clave anónima ni con un usuario logueado.
 -- ════════════════════════════════════════════════════════════════════════
 
-create table public.limite_peticiones (
-  clave       text primary key,       -- 'consulta:<hash de ip>'
-  intentos    integer not null default 0,
-  ventana_fin timestamptz not null,
-  creado_en   timestamptz not null default now()
-);
-
-create index limite_peticiones_ventana_idx on public.limite_peticiones (ventana_fin);
-
-alter table public.limite_peticiones enable row level security;
-alter table public.limite_peticiones force row level security;
-
--- Sin políticas: nadie lee ni escribe esta tabla desde el cliente, en ningún
--- rol. Solo la toca la función de abajo, que es SECURITY DEFINER. Una tabla
--- de rate limiting que el atacante puede leer o vaciar no sirve de nada.
+-- ──────────────────────── Límite de peticiones ────────────────────────
 
 /**
  * Registra un intento y dice si se puede seguir.
@@ -70,7 +53,7 @@ $$;
 
 revoke all on function public.registrar_intento(text, integer, integer) from public, anon, authenticated;
 
-/** Limpieza de ventanas vencidas. Programar en pg_cron o en una tarea diaria. */
+/** Limpieza de ventanas vencidas. */
 create or replace function public.limpiar_limites()
 returns integer
 language plpgsql
@@ -88,3 +71,32 @@ end;
 $$;
 
 revoke all on function public.limpiar_limites() from public, anon, authenticated;
+
+-- ──────────────────────────── Verificación ────────────────────────────
+
+/**
+ * Tablas del esquema público que NO tienen RLS activada.
+ *
+ * Tiene que devolver cero filas, siempre. Existe como función para que un
+ * test automatizado lo compruebe en cada corrida: una regla que solo vive en
+ * el README se rompe el día que alguien agrega una tabla con prisa.
+ */
+create or replace function public.tablas_sin_rls()
+returns setof text
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select c.relname::text
+  from pg_class c
+  join pg_namespace n on n.oid = c.relnamespace
+  where n.nspname = 'public'
+    and c.relkind = 'r'
+    and not c.relrowsecurity
+  order by c.relname;
+$$;
+
+-- Solo la clave de servicio puede llamarla: la lista de tablas desprotegidas
+-- es exactamente el mapa que querría un atacante.
+revoke all on function public.tablas_sin_rls() from public, anon, authenticated;

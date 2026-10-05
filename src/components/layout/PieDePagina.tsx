@@ -103,9 +103,19 @@ export function PieDePagina() {
       </div>
 
       <div className="border-t border-borde">
-        <p className="contenedor py-5 text-xs text-texto-suave">
-          © {anio} {NEGOCIO.titular}.{NEGOCIO.avisoLegal && ` ${NEGOCIO.avisoLegal}`}
-        </p>
+        <div className="contenedor flex flex-col gap-1 py-5 text-xs text-texto-suave">
+          <p>
+            © {anio} {NEGOCIO.titular}.{NEGOCIO.avisoLegal && ` ${NEGOCIO.avisoLegal}`}
+          </p>
+          {/* Transparencia sobre cómo se hizo el sitio. El detalle está en el
+              aviso legal (punto 9). */}
+          <p>
+            Sitio desarrollado con asistencia de inteligencia artificial.{" "}
+            <Link href="/aviso-legal" className="underline hover:text-acento">
+              Más información
+            </Link>
+          </p>
+        </div>
       </div>
     </footer>
   );

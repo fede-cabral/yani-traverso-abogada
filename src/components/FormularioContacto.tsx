@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { enviarConsulta } from "@/acciones/contacto";
 import { ESTADO_INICIAL } from "@/acciones/estado";
 import { AvisoFormulario } from "@/components/AvisoFormulario";
+import { CasillaPrivacidad } from "@/components/CasillaPrivacidad";
 
 function Boton() {
   const { pending } = useFormStatus();
@@ -119,13 +120,13 @@ export function FormularioContacto() {
         </p>
       </div>
 
-      <Boton />
+      <CasillaPrivacidad
+        finalidad="únicamente para responder esta consulta"
+        errores={errores}
+        valores={valores}
+      />
 
-      <p className="text-xs text-texto-suave">
-        Tus datos se usan únicamente para responder esta consulta. Podés pedir
-        su borrado cuando quieras. Ver la{" "}
-        <a href="/politica-de-privacidad" className="underline">política de privacidad</a>.
-      </p>
+      <Boton />
     </form>
   );
 }

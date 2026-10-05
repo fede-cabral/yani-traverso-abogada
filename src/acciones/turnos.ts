@@ -37,6 +37,7 @@ export async function pedirTurno(
   // eso, cualquier error le vacía el formulario.
   const valores = valoresDe(datos, [
     "nombre", "telefono", "email", "area", "fecha_preferida", "franja", "motivo",
+    "acepta_privacidad",
   ]);
 
   if (env.NEXT_PUBLIC_DEMO) {
@@ -65,6 +66,7 @@ export async function pedirTurno(
     fecha_preferida: datos.get("fecha_preferida"),
     franja: datos.get("franja"),
     motivo: datos.get("motivo") || null,
+    acepta_privacidad: datos.get("acepta_privacidad"),
   });
 
   if (!resultado.success) {
