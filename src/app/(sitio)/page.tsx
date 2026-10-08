@@ -35,6 +35,8 @@ const PASOS = [
   },
 ] as const;
 
+const ROMANOS = ["I", "II", "III"] as const;
+
 /*
   El título de la portada suma la especialidad: es lo que alguien escribe en
   el buscador, y el nombre solo no dice a qué se dedica. "absolute" evita que
@@ -119,12 +121,12 @@ export default function Home() {
               {NEGOCIO.presentacion}
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
               <Link href="/turnos" className="boton boton-principal">
                 Pedir un turno
               </Link>
               <a
-                className="boton boton-secundario"
+                className="enlace-subrayado"
                 href={enlaceGeneral()}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -157,56 +159,51 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="contenedor seccion revelar" aria-labelledby="titulo-especialidad">
-        <p className="rotulo">Especialidad</p>
-        <h2 id="titulo-especialidad" className="mt-4 max-w-2xl text-3xl">
-          Derecho inmobiliario y notarial
-        </h2>
-        <hr className="filete mt-6" />
-
-        <ul className="mt-10 grid gap-4 md:grid-cols-2">
-          {ESPECIALIDADES.map((area, i) => (
-            <li key={area.slug}>
-              <Link href={`/areas#${area.slug}`} className="tarjeta tarjeta-area h-full">
-                <span className="numero">{String(i + 1).padStart(2, "0")}</span>
-                <h3>{area.nombre}</h3>
-                <p>{area.resumen}</p>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section
-        className="franja-arena seccion revelar"
-        aria-labelledby="titulo-areas"
-      >
-        <div className="contenedor">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="rotulo">Áreas de práctica</p>
-              <h2 id="titulo-areas" className="mt-4 text-3xl">
-                Otras áreas en las que trabaja el estudio
-              </h2>
-            </div>
-            <Link href="/areas" className="text-sm underline underline-offset-4 hover:text-acento">
-              Ver todas las áreas
-            </Link>
+      {/*
+        Las diez áreas en una sola lista numerada, no en tarjetas: diez cajas
+        iguales dicen "plantilla" y además le dan el mismo peso a todo. Acá la
+        especialidad va a la izquierda, grande y con su descripción; el resto,
+        en dos columnas, solo el nombre. La jerarquía se lee sin explicarla.
+      */}
+      <section className="franja-arena seccion revelar" aria-labelledby="titulo-areas">
+        <div className="contenedor grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
+          <div>
+            <p className="rotulo">Áreas de práctica</p>
+            <h2 id="titulo-areas" className="mt-4 text-3xl">
+              Especialidad
+            </h2>
+            <ul className="mt-8">
+              {ESPECIALIDADES.map((area, i) => (
+                <li key={area.slug}>
+                  <Link href={`/areas#${area.slug}`} className="fila-area fila-area-destacada">
+                    <span className="numero">{String(i + 1).padStart(2, "0")}</span>
+                    <span>
+                      <span className="nombre">{area.nombre}</span>
+                      <span className="resumen">{area.resumen}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {OTRAS_AREAS.map((area, i) => (
-              <li key={area.slug}>
-                <Link href={`/areas#${area.slug}`} className="tarjeta tarjeta-area h-full">
-                  <span className="numero">
-                    {String(i + 1 + ESPECIALIDADES.length).padStart(2, "0")}
-                  </span>
-                  <h3>{area.nombre}</h3>
-                  <p>{area.resumen}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="lg:pt-[5.5rem]">
+            <ul className="grid gap-x-8 sm:grid-cols-2">
+              {OTRAS_AREAS.map((area, i) => (
+                <li key={area.slug}>
+                  <Link href={`/areas#${area.slug}`} className="fila-area">
+                    <span className="numero">
+                      {String(i + 1 + ESPECIALIDADES.length).padStart(2, "0")}
+                    </span>
+                    <span className="nombre">{area.nombre}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link href="/areas" className="enlace-flecha mt-8 inline-block">
+              Ver el detalle de cada área
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -246,11 +243,16 @@ export default function Home() {
             Cómo pedir una consulta
           </h2>
 
-          <ol className="mt-10 grid gap-8 md:grid-cols-3">
+          {/* Numerales romanos, como en una escritura: el primer paso lleva el
+              filete dorado porque es el único que depende de quien lee. */}
+          <ol className="pasos mt-10 grid gap-8 md:grid-cols-3 md:gap-0">
             {PASOS.map((paso, i) => (
-              <li key={paso.titulo} className="border-t border-borde pt-5">
-                <span className="rotulo">Paso {i + 1}</span>
-                <h3 className="mt-3 text-xl">{paso.titulo}</h3>
+              <li key={paso.titulo} className="paso">
+                <span className="numeral" aria-hidden="true">{ROMANOS[i]}</span>
+                <h3 className="mt-3 text-xl">
+                  <span className="sr-only">Paso {i + 1}: </span>
+                  {paso.titulo}
+                </h3>
                 <p className="mt-2 text-sm text-texto-suave">{paso.texto}</p>
               </li>
             ))}

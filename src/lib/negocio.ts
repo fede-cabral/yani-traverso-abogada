@@ -24,6 +24,13 @@ export const NEGOCIO = {
   /** Monograma para el ícono de la pestaña. */
   inicial: "YT",
 
+  /**
+   * Retrato de la Dra., para "Sobre mí". Archivo en public/marca/, en webp,
+   * con sus medidas reales (sin ellas la página salta al cargar la foto).
+   * Mientras sea null, el marco muestra el monograma: nunca una foto de banco.
+   */
+  foto: null as { src: string; ancho: number; alto: number } | null,
+
   /** Qué hace, en pocas palabras. Va en el título de Google y al compartir. */
   rubro: "Abogada",
 

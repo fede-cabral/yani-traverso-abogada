@@ -33,9 +33,13 @@ export default function Areas() {
           El id de cada ítem es el destino de los enlaces de la portada
           (/areas#sucesiones).
         */}
-        <ul className="mt-12 grid gap-4 md:grid-cols-2">
+        <ul className="mt-12 grid gap-x-12 md:grid-cols-2">
           {AREAS.map((area, i) => (
-            <li key={area.slug} id={area.slug} className="tarjeta tarjeta-area">
+            <li
+              key={area.slug}
+              id={area.slug}
+              className={`area-detalle ${area.especialidad ? "area-detalle-especialidad" : ""}`}
+            >
               <span className="numero">
                 {String(i + 1).padStart(2, "0")}
                 {area.especialidad && " · Especialidad"}
@@ -56,11 +60,11 @@ export default function Areas() {
           <p className="mt-4 max-w-xl text-texto-suave">
             Pedí un turno y contá, en pocas palabras, de qué se trata.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
             <Link href="/turnos" className="boton boton-principal">
               Pedir un turno
             </Link>
-            <Link href="/contacto" className="boton boton-secundario">
+            <Link href="/contacto" className="enlace-subrayado">
               Hacer una consulta
             </Link>
           </div>

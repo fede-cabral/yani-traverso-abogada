@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Medallon } from "@/components/Medallon";
+import { Retrato } from "@/components/Retrato";
 import { Compartido } from "@/components/Compartido";
 import { BIOGRAFIA } from "@/lib/biografia";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
@@ -30,10 +30,11 @@ export default function SobreMi() {
               Abogada · Matrícula {MATRICULA_LEGIBLE}
             </p>
           </div>
-          {/* PENDIENTE: cuando la Dra. pase una foto, va acá en lugar del
-              logo. Una foto real, no de banco de imágenes: quien elige
-              abogada quiere verle la cara a la persona que lo va a atender. */}
-          <Medallon prioritario className="mx-auto lg:ms-auto lg:me-0" />
+          {/* La foto va acá (NEGOCIO.foto). Una foto real, no de banco de
+              imágenes: quien elige abogada quiere verle la cara a la persona
+              que lo va a atender. El medallón de la portada viaja hasta la
+              esquina del marco. */}
+          <Retrato className="mx-auto w-full max-w-[16rem] sm:max-w-[20rem] lg:ms-auto lg:me-0" />
         </div>
       </section>
 
@@ -54,7 +55,7 @@ export default function SobreMi() {
             ))}
           </div>
 
-          <aside aria-label="Datos profesionales" className="tarjeta self-start p-6">
+          <aside aria-label="Datos profesionales" className="ficha-lateral self-start">
             <dl className="ficha">
               <div>
                 <dt>Matrícula</dt>
@@ -80,11 +81,11 @@ export default function SobreMi() {
           </aside>
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-3">
+        <div className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-4">
           <Link href="/turnos" className="boton boton-principal">
             Pedir un turno
           </Link>
-          <Link href="/areas" className="boton boton-secundario">
+          <Link href="/areas" className="enlace-subrayado">
             Ver áreas de práctica
           </Link>
         </div>
