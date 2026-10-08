@@ -43,8 +43,8 @@ export default function SobreMi() {
           <img
             className="sobre-mi-imagen"
             src="/marca/sobre-mi-escena.webp"
-            width={301}
-            height={850}
+            width={708}
+            height={2000}
             alt=""
             loading="eager"
             fetchPriority="high"

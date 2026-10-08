@@ -63,7 +63,7 @@ Sin esto el sitio funciona en demostración, pero no se puede publicar.
       Católica de La Plata, escribana, asesora a inmobiliarias y particulares.
       Se sacó "orientada a resultados" (riesgo de publicidad profesional).
       Está en `src/lib/biografia.ts`.
-- [ ] **Imagen de "Sobre mí" en buena resolución.** Hoy es un recorte de
+- [x] **Imagen de "Sobre mí" en buena resolución** (07/10/2026, 708×2000). Era un recorte de
       301×850 de una captura: en escritorio se ve borrosa. Va en
       `public/marca/sobre-mi-escena.webp`.
 - [ ] **Revisar los textos de las diez áreas** (`src/lib/areas.ts`). Hoy cada
