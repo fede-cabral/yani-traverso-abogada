@@ -730,78 +730,144 @@
     }
   }
 
-  /* ── Retrato ──
-     Marco vertical 4:5, el medallón apoyado en la esquina de abajo a la
-     derecha y la placa de matrícula montada sobre el borde izquierdo. Los
-     dos salen del marco a propósito: le dan profundidad sin sombras. */
-  .retrato {
-    position: relative;
-    padding-block-end: 2rem;
-  }
-
-  .retrato-marco {
-    aspect-ratio: 4 / 5;
+  /* ── Sobre mí ──
+     Dos columnas: el texto en su medida de lectura y la imagen a sangre,
+     pegada al borde derecho de la pantalla. La imagen ocupa todo el alto
+     del texto (object-fit: cover), así nunca queda un hueco abajo. */
+  .sobre-mi {
     display: grid;
-    place-items: center;
-    overflow: hidden;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radius-md);
-    background-color: var(--color-superficie);
+    border-block-end: 1px solid var(--color-borde);
 
-    & img {
-      inline-size: 100%;
-      block-size: 100%;
-      object-fit: cover;
+    @media (min-width: 40rem) {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     }
   }
 
-  .retrato-monograma {
-    font-family: var(--font-display);
-    font-size: clamp(4rem, 3rem + 4vw, 6.5rem);
-    letter-spacing: 0.08em;
-    color: color-mix(in oklab, var(--color-acento) 55%, transparent);
+  .sobre-mi-texto {
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    padding-inline: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+    @media (min-width: 76rem) {
+      /* Alinea el texto con el resto del sitio (.contenedor) aunque la
+         sección vaya de borde a borde. */
+      padding-inline-start: calc((100vw - 76rem) / 2 + 2.5rem);
+    }
   }
 
-  .retrato-sello {
-    position: absolute;
-    inset-inline-end: -1rem;
-    inset-block-end: 0.5rem;
+  /* El alto lo pone el texto, no la imagen: la imagen va en absoluto
+     dentro de su columna. Si no, una foto vertical estira la fila entera. */
+  .sobre-mi-escena {
+    position: relative;
+    order: -1;
+    block-size: 15rem;
+
+    @media (min-width: 40rem) {
+      order: 0;
+      block-size: auto;
+    }
   }
 
-  .retrato-placa {
+  .sobre-mi-imagen {
     position: absolute;
-    inset-inline-start: -1rem;
-    inset-block-end: 2.75rem;
-    padding: 0.625rem 0.875rem;
-    border: 1px solid var(--color-borde);
-    background-color: var(--color-marca-fondo);
-    font-size: var(--text-sm);
-    font-variant-numeric: tabular-nums;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
 
-    & span {
-      display: block;
+  /* Rótulo seguido de una línea que corre hasta el borde de la columna. */
+  .rotulo-con-linea {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    &::after {
+      content: "";
+      flex: 1;
+      max-inline-size: 12rem;
+      border-block-start: 1px solid var(--color-acento);
+    }
+  }
+
+  .sobre-mi-titulo {
+    margin-block-start: 1.25rem;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.12;
+    max-inline-size: 16ch;
+  }
+
+  .filete-corto {
+    block-size: 0;
+    inline-size: 4rem;
+    margin-block-start: 1.75rem;
+    border: 0;
+    border-block-start: 1px solid var(--color-acento);
+  }
+
+  .sobre-mi-bio {
+    margin-block-start: 1.75rem;
+    max-inline-size: 42ch;
+
+    & p {
+      color: var(--color-texto);
+      font-size: var(--text-base);
+      line-height: 1.6;
+    }
+
+    & p + p { margin-block-start: 1.25rem; }
+  }
+
+  /* Los cuatro datos con ícono, separados por filetes verticales. En celular,
+     dos por fila. */
+  .datos-profesionales {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 0;
+    padding-block: 2.5rem 3rem;
+
+    @media (min-width: 48rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    & > div {
+      padding-inline: 1.25rem;
+      border-inline-start: 1px solid var(--color-borde);
+    }
+
+    & > div:nth-child(odd) { border-inline-start: 0; padding-inline-start: 0; }
+
+    @media (min-width: 48rem) {
+      & > div:nth-child(odd) {
+        border-inline-start: 1px solid var(--color-borde);
+        padding-inline-start: 1.25rem;
+      }
+      & > div:first-child { border-inline-start: 0; padding-inline-start: 0; }
+    }
+
+    & dt {
+      margin-block-start: 1rem;
       font-size: var(--text-xs);
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
+      color: var(--color-acento);
+    }
+
+    & dd {
+      margin-block-start: 0.5rem;
+      font-size: var(--text-sm);
       color: var(--color-texto-suave);
+
+      & span { display: block; }
     }
   }
 
-  /* El medallón chico: mismo aro, sin el resplandor, que a este tamaño
-     ensuciaría la foto. */
-  .medallon.medallon-sello {
-    inline-size: 6rem;
-    box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-acento) 40%, transparent),
-      0 0 0 0.375rem var(--color-marca-fondo);
-  }
-
-  /* Datos profesionales al costado de la biografía: filete dorado arriba en
-     lugar de caja. */
-  .ficha-lateral {
-    border-block-start: 1px solid var(--color-acento);
-    padding-block-start: 1.5rem;
+  .icono-dato {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    color: var(--color-acento);
   }
 
   /* Etiqueta de estado de un turno, en el panel. */

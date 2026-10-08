@@ -1,87 +1,76 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Retrato } from "@/components/Retrato";
 import { Compartido } from "@/components/Compartido";
-import { BIOGRAFIA } from "@/lib/biografia";
+import { IconoDato } from "@/components/IconoDato";
+import { BIOGRAFIA, DATOS_PROFESIONALES, TITULO_SOBRE_MI } from "@/lib/biografia";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
 
 export const metadata: Metadata = {
   title: "Sobre mí",
-  description: `${NEGOCIO.titular}, abogada. Especialista en derecho inmobiliario y notarial. Matrícula ${MATRICULA_LEGIBLE}.`,
+  description: `${NEGOCIO.titular}, abogada y escribana. Especialista en derecho notarial e inmobiliario. Matrícula ${MATRICULA_LEGIBLE}.`,
   alternates: { canonical: "/sobre-mi" },
 };
 
 export default function SobreMi() {
   return (
     <main id="contenido">
-      <section className="franja-marca">
-        <div className="contenedor grid items-center gap-12 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:py-24">
-          <div>
+      {/*
+        Texto a la izquierda y la imagen a sangre a la derecha, de borde a
+        borde de su columna: la escena (balanza, libros) dice "estudio
+        jurídico" sin palabras, y el texto queda en la columna de lectura.
+        En celular angosto la imagen pasa arriba, como franja.
+      */}
+      <section className="sobre-mi">
+        <div className="sobre-mi-texto">
+          <div className="rotulo-con-linea">
             <Compartido nombre="rotulo-sobre-mi">
               <p className="rotulo">Sobre mí</p>
             </Compartido>
-            <h1 className="mt-4 text-3xl sm:text-[length:var(--text-hero)]">
-              {NEGOCIO.titular}
-            </h1>
-            <Compartido nombre="filete-sobre-mi">
-              <hr className="filete mt-7" />
-            </Compartido>
-            <p className="mt-7 text-lg text-texto-suave">
-              Abogada · Matrícula {MATRICULA_LEGIBLE}
-            </p>
           </div>
-          {/* La foto va acá (NEGOCIO.foto). Una foto real, no de banco de
-              imágenes: quien elige abogada quiere verle la cara a la persona
-              que lo va a atender. El medallón de la portada viaja hasta la
-              esquina del marco. */}
-          <Retrato className="mx-auto w-full max-w-[16rem] sm:max-w-[20rem] lg:ms-auto lg:me-0" />
+          <h1 className="sobre-mi-titulo">{TITULO_SOBRE_MI}</h1>
+          <Compartido nombre="filete-sobre-mi">
+            <hr className="filete-corto" />
+          </Compartido>
+          <div className="sobre-mi-bio">
+            {BIOGRAFIA.map((parrafo) => (
+              <p key={parrafo}>{parrafo}</p>
+            ))}
+          </div>
+        </div>
+
+        {/* Decorativa: no aporta información, el lector de pantalla la saltea. */}
+        <div className="sobre-mi-escena">
+          <img
+            className="sobre-mi-imagen"
+            src="/marca/sobre-mi-escena.webp"
+            width={301}
+            height={850}
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
       </section>
 
-      <section className="contenedor seccion">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
-          <div className="max-w-[62ch]">
-            {BIOGRAFIA.map((parrafo, i) => (
-              <p
-                key={parrafo}
-                className={
-                  i === 0
-                    ? "font-serif text-2xl leading-snug"
-                    : "mt-6 text-lg text-texto-suave"
-                }
-              >
-                {parrafo}
-              </p>
-            ))}
-          </div>
+      <section aria-label="Datos profesionales" className="contenedor">
+        <dl className="datos-profesionales">
+          {DATOS_PROFESIONALES.map((dato) => (
+            <div key={dato.titulo}>
+              <IconoDato nombre={dato.icono} />
+              <dt>{dato.titulo}</dt>
+              <dd>
+                {dato.lineas.map((linea) => (
+                  <span key={linea}>{linea}</span>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
-          <aside aria-label="Datos profesionales" className="ficha-lateral self-start">
-            <dl className="ficha">
-              <div>
-                <dt>Matrícula</dt>
-                <dd>
-                  Tomo {NEGOCIO.matricula.tomo}, Folio {NEGOCIO.matricula.folio}
-                  <br />
-                  {NEGOCIO.matricula.colegio}
-                </dd>
-              </div>
-              <div>
-                <dt>Especialidad</dt>
-                <dd>Derecho inmobiliario y notarial</dd>
-              </div>
-              <div>
-                <dt>Zona de atención</dt>
-                <dd>{NEGOCIO.zona}</dd>
-              </div>
-              <div>
-                <dt>Horario</dt>
-                <dd>{NEGOCIO.horarios.legible}</dd>
-              </div>
-            </dl>
-          </aside>
-        </div>
-
-        <div className="mt-12 flex flex-wrap items-center gap-x-7 gap-y-4">
+      <section className="contenedor pb-20">
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-4">
           <Link href="/turnos" className="boton boton-principal">
             Pedir un turno
           </Link>

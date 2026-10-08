@@ -15,31 +15,27 @@ import { NEGOCIO } from "@/lib/negocio";
  * del logo es negro puro, y sobre un color claro el disco se vería recortado.
  * Sobre la franja, apenas más clara, se lee como una moneda apoyada.
  *
- * Está grande en la portada y chico, como sello sobre el retrato, en "Sobre
- * mí". El nombre de transición hace que al ir de una a otra el medallón viaje
- * y cambie de tamaño en vez de desaparecer y reaparecer: se lee como el
- * mismo objeto.
+ * Hoy está solo en la portada. El nombre de transición queda para cuando
+ * aparezca en otra página: el medallón viajaría de un lugar al otro en vez
+ * de desaparecer y reaparecer, y se leería como el mismo objeto.
  * Por eso no puede haber dos medallones en una misma página (el navegador
  * cancela la transición si dos elementos comparten nombre).
  */
 export function Medallon({
   prioritario = false,
-  tamano = "grande",
   className = "",
 }: {
   /** True solo en la portada, donde es la imagen más grande de la pantalla. */
   prioritario?: boolean;
-  /** "sello": chico, apoyado sobre el retrato de "Sobre mí". */
-  tamano?: "grande" | "sello";
   className?: string;
 }) {
   return (
     <Compartido nombre="medallon">
       <img
-        className={`medallon ${tamano === "sello" ? "medallon-sello" : ""} ${className}`}
+        className={`medallon ${className}`}
         src="/marca/logo.webp"
         srcSet="/marca/logo-320.webp 320w, /marca/logo.webp 640w"
-        sizes={tamano === "sello" ? "6rem" : "(max-width: 640px) 70vw, 22rem"}
+        sizes="(max-width: 640px) 70vw, 22rem"
         width={640}
         height={640}
         alt={`Logo de ${NEGOCIO.nombre}, abogada. ${NEGOCIO.eslogan}.`}

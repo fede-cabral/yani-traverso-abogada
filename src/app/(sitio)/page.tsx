@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Medallon } from "@/components/Medallon";
 import { Compartido } from "@/components/Compartido";
 import { AREAS } from "@/lib/areas";
-import { BIOGRAFIA } from "@/lib/biografia";
+import { CITA_PORTADA } from "@/lib/biografia";
 import { env } from "@/lib/env";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
 import { enlaceGeneral } from "@/lib/whatsapp";
@@ -225,7 +225,7 @@ export default function Home() {
           <div>
             {/* Cita en primera persona: es su voz, y la serif grande la separa
                 del resto del sitio, que habla en tercera. */}
-            <p className="font-serif text-2xl leading-snug">{BIOGRAFIA[0]}</p>
+            <p className="font-serif text-2xl leading-snug">{CITA_PORTADA}</p>
             <Link
               href="/sobre-mi"
               className="mt-6 inline-flex items-center text-sm underline underline-offset-4 hover:text-acento"
