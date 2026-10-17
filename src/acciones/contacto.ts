@@ -5,6 +5,7 @@ import { crearClienteAdmin } from "@/lib/supabase/admin";
 import { LIMITES, permitido } from "@/lib/seguridad/limite";
 import { consultaSchema, erroresPorCampo } from "@/lib/validations/formularios";
 import { valoresDe, type EstadoFormulario } from "./estado";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 const RECIBIDA = "Recibimos tu consulta. Te respondemos a la brevedad.";
 
@@ -97,7 +98,7 @@ export async function enviarConsulta(
   } catch (error) {
     // El detalle va al log del servidor; el visitante recibe un mensaje
     // genérico. Un error de Postgres en pantalla filtra tablas y columnas.
-    console.error("[contacto] fallo al guardar la consulta", error);
+    console.error("[contacto] fallo al guardar la consulta", errorParaLog(error));
     return {
       ok: false,
       mensaje: "No pudimos guardar tu consulta. Probá de nuevo o escribinos por WhatsApp.",

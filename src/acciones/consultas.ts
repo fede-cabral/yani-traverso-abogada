@@ -8,6 +8,7 @@ import { env } from "@/lib/env";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { estadoConsultaSchema } from "@/lib/validations/formularios";
 import type { EstadoFormulario } from "./estado";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 /**
  * Cambio de estado de una consulta, desde el panel.
@@ -68,7 +69,7 @@ export async function cambiarEstadoConsulta(
       mensaje: `Consulta marcada como ${ETIQUETA_ESTADO_CONSULTA[estado].toLowerCase()}.`,
     };
   } catch (error) {
-    console.error("[consultas] fallo al cambiar el estado", error);
+    console.error("[consultas] fallo al cambiar el estado", errorParaLog(error));
     return { ok: false, mensaje: "No se pudo cambiar el estado. Intentá de nuevo." };
   }
 }

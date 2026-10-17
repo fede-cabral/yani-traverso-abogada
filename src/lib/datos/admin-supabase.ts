@@ -3,6 +3,7 @@ import "server-only";
 import type { EstadoConsulta } from "@/lib/consultas";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import type { EstadoTurno, Franja } from "@/lib/turnos";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 /**
  * Consultas del panel.
@@ -44,7 +45,7 @@ export async function resumenPanel(): Promise<ResumenPanel> {
       turnos_confirmados: confirmados.count ?? 0,
     };
   } catch (error) {
-    console.error("[admin:resumen]", error);
+    console.error("[admin:resumen]", errorParaLog(error));
     return { consultas_nuevas: 0, turnos_pendientes: 0, turnos_confirmados: 0 };
   }
 }
@@ -75,7 +76,7 @@ export async function listarConsultas(): Promise<ConsultaAdmin[]> {
     .limit(100);
 
   if (error) {
-    console.error("[admin:listarConsultas]", error);
+    console.error("[admin:listarConsultas]", errorParaLog(error));
     return [];
   }
   return (data ?? []) as ConsultaAdmin[];
@@ -113,7 +114,7 @@ export async function listarTurnos(): Promise<TurnoAdmin[]> {
     .limit(200);
 
   if (error) {
-    console.error("[admin:listarTurnos]", error);
+    console.error("[admin:listarTurnos]", errorParaLog(error));
     return [];
   }
   return (data ?? []) as TurnoAdmin[];

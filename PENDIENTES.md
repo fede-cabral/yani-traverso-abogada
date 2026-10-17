@@ -139,6 +139,10 @@ En orden. Cada paso necesita que el anterior esté hecho.
      dar cero filas.
   3. Crear el usuario administrador de ella y el tuyo (`README.md` → "El
      primer administrador"). Cada uno con su mail.
+  4. **Apagar el registro público** (*Authentication → Sign In / Providers →
+     Allow new users to sign up*: desactivado). Supabase lo trae encendido:
+     cualquiera podría crearse una cuenta. No vería nada (RLS lo frena), pero
+     las únicas cuentas tienen que ser las dos de arriba.
 - [ ] **Supabase — proyecto de pruebas** (separado) y `.env.test`. Con eso
       corren los tests de autorización. **Nunca** contra producción: escriben
       y borran datos.

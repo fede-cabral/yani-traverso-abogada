@@ -14,6 +14,7 @@ import {
   turnoSchema,
 } from "@/lib/validations/formularios";
 import { valoresDe, type EstadoFormulario } from "./estado";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 /**
  * Pedido de turno desde el sitio público.
@@ -102,7 +103,7 @@ export async function pedirTurno(
       }. Te vamos a contactar para confirmar el horario.`,
     };
   } catch (error) {
-    console.error("[turnos] fallo al guardar el pedido", error);
+    console.error("[turnos] fallo al guardar el pedido", errorParaLog(error));
     return {
       ok: false,
       mensaje: "No pudimos guardar tu pedido. Probá de nuevo o escribinos por WhatsApp.",
@@ -169,7 +170,7 @@ export async function cambiarEstadoTurno(
 
     return { ok: true, mensaje: `Turno marcado como ${ETIQUETA_ESTADO[estado].toLowerCase()}.` };
   } catch (error) {
-    console.error("[turnos] fallo al cambiar el estado", error);
+    console.error("[turnos] fallo al cambiar el estado", errorParaLog(error));
     return { ok: false, mensaje: "No se pudo cambiar el estado. Intentá de nuevo." };
   }
 }

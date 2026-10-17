@@ -3,6 +3,7 @@ import "server-only";
 import { headers } from "next/headers";
 import { crearClienteAdmin } from "@/lib/supabase/admin";
 import type { Sesion } from "./sesion";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 /**
  * Registro de auditoría de las acciones del panel.
@@ -39,6 +40,6 @@ export async function auditar(
     // Un fallo al auditar no debe tumbar la operación, pero sí tiene que
     // gritar en los logs: una auditoría que falla en silencio es peor que
     // no tener auditoría, porque da una falsa sensación de cobertura.
-    console.error("[auditoria] NO SE PUDO REGISTRAR", { accion, entidad, error });
+    console.error("[auditoria] NO SE PUDO REGISTRAR", { accion, entidad, error: errorParaLog(error) });
   }
 }

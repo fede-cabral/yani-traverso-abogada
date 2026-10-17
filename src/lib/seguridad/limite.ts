@@ -3,6 +3,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { crearClienteAdmin } from "@/lib/supabase/admin";
+import { errorParaLog } from "@/lib/seguridad/log";
 
 /**
  * Límite de peticiones.
@@ -61,7 +62,7 @@ export async function permitido(limite: Limite): Promise<boolean> {
     if (error) throw error;
     return data === true;
   } catch (error) {
-    console.error("[limite] fallo al verificar, se deniega por precaución", error);
+    console.error("[limite] fallo al verificar, se deniega por precaución", errorParaLog(error));
     return false;
   }
 }
