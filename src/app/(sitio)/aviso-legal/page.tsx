@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
+import { metadatosPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Aviso legal",
-  description: "Condiciones de uso de este sitio.",
-  alternates: { canonical: "/aviso-legal" },
-  robots: { index: true, follow: false },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: "Aviso legal",
+  descripcion: `Condiciones de uso del sitio de la ${NEGOCIO.nombre}: titular, matrícula, alcance de la información publicada, confidencialidad y ley aplicable.`,
+  ruta: "/aviso-legal",
+  indexar: "sin-seguir",
+});
 
 /**
  * Aviso legal.

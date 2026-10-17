@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { env } from "@/lib/env";
 import "./globals.css";
 import { NEGOCIO, TITULO_SITIO } from "@/lib/negocio";
+import { ROBOTS_DEMO } from "@/lib/seo";
 
 /**
  * Layout raíz: solo el documento.
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
   description: NEGOCIO.descripcion,
   alternates: { canonical: "/" },
   openGraph: { type: "website", locale: "es_AR", siteName: NEGOCIO.nombre },
-  robots: { index: true, follow: true },
+  robots: env.NEXT_PUBLIC_DEMO ? ROBOTS_DEMO : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

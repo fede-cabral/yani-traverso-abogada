@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { FormularioTurno } from "@/components/FormularioTurno";
 import { OPCIONES_AREA } from "@/lib/areas";
 import { NEGOCIO } from "@/lib/negocio";
+import { metadatosPagina } from "@/lib/seo";
 import { rangoDeTurnos } from "@/lib/turnos";
 import { enlaceGeneral, telefonoLegible } from "@/lib/whatsapp";
 
-export const metadata: Metadata = {
-  title: "Pedir un turno",
-  description: `Pedí un turno con la ${NEGOCIO.nombre}, abogada. ${NEGOCIO.horarios.legible}. ${NEGOCIO.zona}.`,
-  alternates: { canonical: "/turnos" },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: "Pedir un turno",
+  descripcion: `Pedí un turno con la ${NEGOCIO.nombre}, abogada en ${NEGOCIO.direccion.ciudad}. ${NEGOCIO.horarios.legible}. ${NEGOCIO.zona}.`,
+  ruta: "/turnos",
+});
 
 export default async function Turnos({
   searchParams,

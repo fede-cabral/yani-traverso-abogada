@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Medallon } from "@/components/Medallon";
 import { Compartido } from "@/components/Compartido";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
 import { AREAS } from "@/lib/areas";
 import { CITA_PORTADA } from "@/lib/biografia";
 import { env } from "@/lib/env";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
+import { ID_ESTUDIO, metadatosPagina } from "@/lib/seo";
 import { enlaceGeneral } from "@/lib/whatsapp";
 
 const ESPECIALIDADES = AREAS.filter((a) => a.especialidad);
@@ -38,13 +40,17 @@ const PASOS = [
 const ROMANOS = ["I", "II", "III"] as const;
 
 /*
-  El título de la portada suma la especialidad: es lo que alguien escribe en
-  el buscador, y el nombre solo no dice a qué se dedica. "absolute" evita que
-  la plantilla del layout le agregue el nombre otra vez.
+  El título de la portada suma qué es y dónde: "abogada en Cañuelas" es lo
+  que escribe en el buscador quien no la conoce, y el nombre solo no lo
+  dice. Las especialidades van en la descripción: con todo en el título
+  pasaba los ~60 caracteres y Google lo cortaba.
 */
-export const metadata: Metadata = {
-  title: { absolute: `${NEGOCIO.nombre} — Abogada · Derecho inmobiliario y notarial` },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: `${NEGOCIO.nombre} · Abogada y escribana en ${NEGOCIO.direccion.ciudad}`,
+  tituloCompleto: true,
+  descripcion: NEGOCIO.descripcion,
+  ruta: "/",
+});
 
 export default function Home() {
   /*
@@ -63,6 +69,7 @@ export default function Home() {
   const estudio = {
     "@context": "https://schema.org",
     "@type": NEGOCIO.tipoSchema,
+    "@id": ID_ESTUDIO,
     name: NEGOCIO.nombre,
     description: NEGOCIO.descripcion,
     url: env.NEXT_PUBLIC_SITE_URL,
@@ -95,12 +102,7 @@ export default function Home() {
 
   return (
     <main id="contenido">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(estudio).replace(/</g, "\\u003c"),
-        }}
-      />
+      <DatosEstructurados datos={estudio} />
 
       {/*
         Arriba de todo, en orden: quién es → qué hace → dónde → acción.
@@ -112,7 +114,9 @@ export default function Home() {
           <div>
             <p className="rotulo">{NEGOCIO.nombre} · {NEGOCIO.rubro}</p>
             <h1 className="titulo-portada mt-6">
-              <span className="linea">{inicioEslogan}</span>
+              {/* El espacio no se ve (cada línea es un bloque), pero sin él
+                  Google y los lectores de pantalla leen "jurídicaintegral". */}
+              <span className="linea">{inicioEslogan}</span>{" "}
               <span className="linea linea-acento">{cierreEslogan}</span>
             </h1>
             <hr className="filete mt-8" />
@@ -175,7 +179,7 @@ export default function Home() {
             <ul className="mt-8">
               {ESPECIALIDADES.map((area, i) => (
                 <li key={area.slug}>
-                  <Link href={`/areas#${area.slug}`} className="fila-area fila-area-destacada">
+                  <Link href={`/areas/${area.slug}`} className="fila-area fila-area-destacada">
                     <span className="numero">{String(i + 1).padStart(2, "0")}</span>
                     <span>
                       <span className="nombre">{area.nombre}</span>
@@ -191,7 +195,7 @@ export default function Home() {
             <ul className="grid gap-x-8 sm:grid-cols-2">
               {OTRAS_AREAS.map((area, i) => (
                 <li key={area.slug}>
-                  <Link href={`/areas#${area.slug}`} className="fila-area">
+                  <Link href={`/areas/${area.slug}`} className="fila-area">
                     <span className="numero">
                       {String(i + 1 + ESPECIALIDADES.length).padStart(2, "0")}
                     </span>

@@ -69,6 +69,14 @@ Sin esto el sitio funciona en demostración, pero no se puede publicar.
 - [ ] **Revisar los textos de las diez áreas** (`src/lib/areas.ts`). Hoy cada
       una tiene una línea genérica. Si quiere detallar qué hace en cada una,
       que lo escriba ella.
+- [ ] **Aprobar las páginas de cada área** (`/areas/sucesiones`, etc.; texto
+      en `src/lib/areas-contenido.ts`, 17/10/2026). Son un borrador escrito
+      para Google: explican en general qué es cada trámite, sus etapas y qué
+      llevar a la consulta, sin decir qué hace ella en cada uno. Que revise
+      sobre todo que lo legal sea correcto (plazos, nombres de las etapas,
+      fueros de Provincia y CABA) y si quiere sacar alguna área. En
+      "Derecho notarial" no se dice que firme escrituras: confirmar si tiene
+      registro notarial.
 - [ ] **Aprobar el lema de la portada**: "Vas a tener acompañamiento en todo
       el proceso." Es una promesa de trato, no de resultado, pero va en su
       nombre. Está en `negocio.ts` → `lema`.

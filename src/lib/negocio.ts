@@ -29,7 +29,7 @@ export const NEGOCIO = {
 
   /** Una o dos frases para buscadores. Hasta ~155 caracteres. */
   descripcion:
-    "Asesoría jurídica integral en Provincia de Buenos Aires y CABA. Derecho inmobiliario y notarial, sucesiones, familia, laboral y penal.",
+    "Abogada y escribana en Cañuelas. Derecho inmobiliario y notarial, sucesiones, familia, laboral y penal. Provincia de Buenos Aires y CABA.",
 
   /** La frase grande de la portada y de la tarjeta al compartir el sitio. */
   eslogan: "Asesoría jurídica integral",
@@ -39,7 +39,7 @@ export const NEGOCIO = {
 
   /** El párrafo debajo del eslogan, en la portada. */
   presentacion:
-    "Abogada especialista en derecho inmobiliario y notarial. Atención en Provincia de Buenos Aires y CABA.",
+    "Abogada especialista en derecho inmobiliario y notarial. Estudio en Cañuelas; atención en Provincia de Buenos Aires y CABA.",
 
   /** Tipo de negocio para Google (schema.org). */
   tipoSchema: "Attorney",

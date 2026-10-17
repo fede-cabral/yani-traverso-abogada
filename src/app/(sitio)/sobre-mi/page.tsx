@@ -3,17 +3,40 @@ import Link from "next/link";
 import { Compartido } from "@/components/Compartido";
 import { IconoDato } from "@/components/IconoDato";
 import { BIOGRAFIA, DATOS_PROFESIONALES, TITULO_SOBRE_MI } from "@/lib/biografia";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
+import { env } from "@/lib/env";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
+import { ID_ESTUDIO, metadatosPagina, migas } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Sobre mí",
-  description: `${NEGOCIO.titular}, abogada y escribana. Especialista en derecho notarial e inmobiliario. Matrícula ${MATRICULA_LEGIBLE}.`,
-  alternates: { canonical: "/sobre-mi" },
+export const metadata: Metadata = metadatosPagina({
+  titulo: "Sobre mí",
+  descripcion: `${NEGOCIO.titular}, abogada y escribana en ${NEGOCIO.direccion.ciudad}. Especialista en derecho notarial e inmobiliario. Matrícula ${MATRICULA_LEGIBLE}.`,
+  ruta: "/sobre-mi",
+});
+
+/*
+  La Dra. como persona, para Google: lo que permite que su nombre aparezca
+  con su profesión, su formación y su colegio. Todo sale de lo que ella
+  escribió en su biografía; nada se agrega.
+*/
+const persona = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: NEGOCIO.titular,
+  honorificPrefix: "Dra.",
+  jobTitle: ["Abogada", "Escribana"],
+  url: `${env.NEXT_PUBLIC_SITE_URL}/sobre-mi`,
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Universidad Católica de La Plata" },
+  memberOf: { "@type": "Organization", name: NEGOCIO.matricula.colegio },
+  knowsAbout: ["Derecho inmobiliario", "Derecho notarial"],
+  worksFor: { "@id": ID_ESTUDIO },
+  ...(NEGOCIO.linkedin && { sameAs: [NEGOCIO.linkedin.url] }),
 };
 
 export default function SobreMi() {
   return (
     <main id="contenido">
+      <DatosEstructurados datos={[persona, migas([{ nombre: "Sobre mí", ruta: "/sobre-mi" }])]} />
       {/*
         Texto a la izquierda y la imagen a sangre a la derecha, de borde a
         borde de su columna: la escena (balanza, libros) dice "estudio

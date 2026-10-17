@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FormularioContacto } from "@/components/FormularioContacto";
 import { MATRICULA_LEGIBLE, NEGOCIO, enlaceMapa } from "@/lib/negocio";
+import { metadatosPagina } from "@/lib/seo";
 import { enlaceGeneral, telefonoLegible } from "@/lib/whatsapp";
 
-export const metadata: Metadata = {
-  title: "Contacto",
-  description: `Contacto con la ${NEGOCIO.nombre}, abogada. WhatsApp, mail y formulario de consulta. ${NEGOCIO.horarios.legible}.`,
-  alternates: { canonical: "/contacto" },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: "Contacto",
+  descripcion: `Contacto con la ${NEGOCIO.nombre}, abogada. Estudio en ${NEGOCIO.direccionLegible}. WhatsApp, mail y formulario de consulta.`,
+  ruta: "/contacto",
+});
 
 export default function Contacto() {
   const mapa = enlaceMapa();

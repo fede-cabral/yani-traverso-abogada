@@ -703,6 +703,11 @@
     & .enlace-flecha { margin-block-start: 0.25rem; }
   }
 
+  .area-detalle-titulo {
+    transition: color 150ms ease;
+    &:hover { color: var(--color-acento); }
+  }
+
   .area-detalle-especialidad {
     border-block-start-color: var(--color-acento);
 
@@ -881,6 +886,106 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
+  }
+
+  /* ── Página de un área ──
+     Texto a la izquierda en columna de lectura; a la derecha, lo práctico
+     (qué traer y el turno), que en celular queda debajo. */
+  .migas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-texto-suave);
+
+    & a { text-decoration: underline; text-underline-offset: 0.2em; }
+    & a:hover { color: var(--color-acento); }
+  }
+
+  .area-pagina {
+    display: grid;
+    gap: 3rem;
+
+    @media (min-width: 56rem) {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: 5rem;
+      align-items: start;
+    }
+  }
+
+  .area-pagina-texto {
+    max-inline-size: 62ch;
+
+    & > p { font-size: var(--text-base); line-height: 1.7; }
+    & > p + p { margin-block-start: 1.25rem; }
+    & h2 { margin-block-start: 3rem; font-size: var(--text-2xl); }
+  }
+
+  .area-etapas {
+    margin-block-start: 1.5rem;
+    counter-reset: etapa;
+
+    & li {
+      counter-increment: etapa;
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      padding-block: 1rem;
+      border-block-start: 1px solid var(--color-borde);
+      line-height: 1.6;
+    }
+
+    & li::before {
+      content: counter(etapa, upper-roman);
+      font-family: var(--font-display);
+      color: var(--color-acento);
+    }
+  }
+
+  .area-aclaracion {
+    margin-block-start: 1.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-texto-suave);
+  }
+
+  .area-pagina-lateral {
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--color-acento);
+
+    @media (min-width: 56rem) { position: sticky; top: 6rem; }
+
+    & h2 { font-size: var(--text-xl); }
+
+    & ul { margin-block-start: 1rem; }
+    & li {
+      position: relative;
+      padding-inline-start: 1.25rem;
+      padding-block: 0.4rem;
+      font-size: var(--text-sm);
+      line-height: 1.5;
+    }
+    & li::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: 0.95em;
+      inline-size: 0.5rem;
+      block-size: 1px;
+      background: var(--color-acento);
+    }
+  }
+
+  .otras-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+
+    & a {
+      text-decoration: underline;
+      text-decoration-color: var(--color-borde);
+      text-underline-offset: 0.3em;
+      transition: color 150ms ease, text-decoration-color 150ms ease;
+    }
+    & a:hover { color: var(--color-acento); text-decoration-color: currentColor; }
   }
 }
 

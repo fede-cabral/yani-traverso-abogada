@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { MATRICULA_LEGIBLE, NEGOCIO } from "@/lib/negocio";
+import { metadatosPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Política de privacidad",
-  description: "Qué datos se recolectan en este sitio, para qué, dónde se guardan, por cuánto tiempo y cuáles son tus derechos.",
-  alternates: { canonical: "/politica-de-privacidad" },
-  robots: { index: true, follow: false },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: "Política de privacidad",
+  descripcion: "Qué datos se recolectan en este sitio, para qué, dónde se guardan, por cuánto tiempo y cuáles son tus derechos.",
+  ruta: "/politica-de-privacidad",
+  indexar: "sin-seguir",
+});
 
 /*
   Proveedores técnicos. Si cambia alguno, o la región de la base, esta lista

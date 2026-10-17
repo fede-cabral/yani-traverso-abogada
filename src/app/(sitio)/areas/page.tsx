@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DatosEstructurados } from "@/components/DatosEstructurados";
 import { AREAS } from "@/lib/areas";
 import { NEGOCIO } from "@/lib/negocio";
+import { metadatosPagina, migas } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Áreas de práctica",
-  description: `Derecho inmobiliario y notarial, sucesiones, usucapiones, familia, laboral, ART, accidentes de tránsito, penal y amparos de salud. ${NEGOCIO.zona}.`,
-  alternates: { canonical: "/areas" },
-};
+export const metadata: Metadata = metadatosPagina({
+  titulo: `Áreas de práctica en ${NEGOCIO.direccion.ciudad}`,
+  descripcion:
+    "Derecho inmobiliario y notarial, sucesiones, usucapiones, familia, laboral, ART, accidentes, penal y amparos de salud. Cañuelas, Prov. de Bs. As. y CABA.",
+  ruta: "/areas",
+});
 
 export default function Areas() {
   return (
     <main id="contenido">
+      <DatosEstructurados datos={migas([{ nombre: "Áreas de práctica", ruta: "/areas" }])} />
       <section className="contenedor seccion">
         <p className="rotulo">Áreas de práctica</p>
         <h1 className="mt-4 max-w-3xl text-3xl sm:text-[length:var(--text-hero)]">
@@ -25,13 +29,10 @@ export default function Areas() {
         </p>
 
         {/*
-          Una sola lista y no una página por área: hoy cada área tiene una
-          línea de descripción, y diez páginas de una línea son diez páginas
-          vacías para Google. Cuando la Dra. escriba el detalle de cada una,
-          se separan.
-
-          El id de cada ítem es el destino de los enlaces de la portada
-          (/areas#sucesiones).
+          El índice de las áreas. Cada una tiene además su página propia
+          (/areas/sucesiones) con el detalle del trámite: es la que busca
+          posicionar en Google. El id de cada ítem se conserva para los
+          enlaces viejos a /areas#sucesiones.
         */}
         <ul className="mt-12 grid gap-x-12 md:grid-cols-2">
           {AREAS.map((area, i) => (
@@ -44,11 +45,20 @@ export default function Areas() {
                 {String(i + 1).padStart(2, "0")}
                 {area.especialidad && " · Especialidad"}
               </span>
-              <h2 className="text-2xl">{area.nombre}</h2>
+              <h2 className="text-2xl">
+                <Link href={`/areas/${area.slug}`} className="area-detalle-titulo">
+                  {area.nombre}
+                </Link>
+              </h2>
               <p>{area.resumen}</p>
-              <Link href={`/turnos?area=${area.slug}`} className="enlace-flecha">
-                Pedir turno<span className="sr-only">: {area.nombre}</span>
-              </Link>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <Link href={`/areas/${area.slug}`} className="enlace-flecha">
+                  Cómo es el trámite<span className="sr-only">: {area.nombre}</span>
+                </Link>
+                <Link href={`/turnos?area=${area.slug}`} className="enlace-subrayado">
+                  Pedir turno<span className="sr-only">: {area.nombre}</span>
+                </Link>
+              </div>
             </li>
           ))}
         </ul>
